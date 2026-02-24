@@ -15,9 +15,8 @@
             overflow: hidden;
         }
 
-        /* Ajustado para 1100vw pois agora temos 11 seções no total */
         .slider { 
-            display: flex; width: 1100vw; height: 100vh;
+            display: flex; width: 1200vw; height: 100vh;
             transition: transform 0.6s cubic-bezier(0.45, 0, 0.55, 1);
         }
 
@@ -63,6 +62,13 @@
         }
 
         .btn-custom { background: var(--pink); border: none; color: white; padding: 12px 20px; border-radius: 50px; cursor: pointer; font-weight: bold; margin-top: 10px; width: 100%; }
+        
+        /* Estilos Novos */
+        .list-item { background: rgba(255,255,255,0.1); padding: 10px; margin-top: 5px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; }
+        .done { text-decoration: line-through; opacity: 0.5; }
+        .check-btn { background: #4caf50; border: none; color: white; border-radius: 5px; padding: 5px 10px; cursor: pointer; }
+        .music-card { background: var(--glass); border: 1px solid var(--pink); padding: 10px; border-radius: 10px; margin-top: 10px; }
+        
         #photoPreview { width: 100%; max-height: 200px; object-fit: contain; margin-top: 15px; border-radius: 10px; display: none; border: 1px solid var(--gold); }
         .album-card { background: rgba(255,255,255,0.1); padding: 15px; border-radius: 15px; margin-top: 15px; border-left: 5px solid var(--pink); text-align: left; }
         canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 5; pointer-events: none; }
@@ -75,7 +81,7 @@
             <div class="container">
                 <div class="photo-frame"><img src="foto1.jpeg"></div>
                 <h2>João & Maria</h2>
-                <p class="love-text">Sabe, minha princesa, eu sempre acreditei que algumas histórias já nascem escritas nas estrelas. Somos João e Maria, mas nossa história é muito melhor que a dos livros. No nosso mundo real, nem tudo são flores, mas é justamente a nossa união que nos faz superar qualquer desafio. Você é a minha vida, o encaixe exato de tudo o que eu sempre sonhei sem nem saber que existia. Nesses 8 meses, cada risada e cada plano confirmam que fomos feitos um para o outro.</p>
+                <p class="love-text">Sabe, minha princesa, eu sempre acreditei que algumas histórias já nascem escritas nas estrelas. Somos João e Maria, mas nossa história é muito melhor que a dos livros. Nesses 8 meses, cada risada e cada plano confirmam que fomos feitos um para o outro.</p>
             </div>
         </section>
 
@@ -83,7 +89,7 @@
             <div class="container">
                 <div class="photo-frame"><img src="foto2.jpeg"></div>
                 <div class="counter-grid" id="timer"></div>
-                <p class="love-text">Amar você não é sorte, é a melhor decisão que eu tomo todas as manhãs ao despertar. São 8 meses de cumplicidade, onde o tempo parece voar e parar ao mesmo tempo quando estou com você.</p>
+                <p class="love-text">Amar você não é sorte, é a melhor decisão que eu tomo todas as manhãs ao despertar.</p>
             </div>
         </section>
 
@@ -92,9 +98,9 @@
                 <div class="photo-frame"><img src="foto3.jpeg"></div>
                 <div class="interaction-box">
                     <h3 style="font-family: 'Dancing Script'; color: var(--pink); font-size: 2rem;">O que eu mais gosto em você?</h3>
-                    <input type="text" id="userInput" style="width:100%; background:none; border:none; border-bottom:2px solid var(--pink); color:white; text-align:center; padding:10px;" placeholder="Escreva aqui...">
+                    <input type="text" id="userInput" oninput="checkLove()" style="width:100%; background:none; border:none; border-bottom:2px solid var(--pink); color:white; text-align:center; padding:10px;" placeholder="Escreva aqui...">
+                    <p id="loveResponse" style="margin-top:15px; font-weight:bold; color:var(--pink); display:none;">Você acertou! Eu amo cada detalhe seu, gosto de absolutamente TUDO em você! ❤️</p>
                 </div>
-                <p class="love-text">A verdade é que eu gosto de absolutamente TUDO em você. Gosto do seu jeito de me olhar, da paz que seu abraço me traz.</p>
             </div>
         </section>
 
@@ -104,7 +110,18 @@
                 <div class="interaction-box" style="border-radius: 50px;">
                     <a href="https://youtu.be/LyaEnoiIwPs?si=o65aKWNHzU_EEtSd" target="_blank" style="color: white; text-decoration: none; font-weight: bold;">🎵 TOQUE AQUI PARA OUVIR NOSSA MÚSICA ❤️</a>
                 </div>
-                <p class="love-text">"Pra falar do amor de dois, a gente tem que ser um só".</p>
+            </div>
+        </section>
+
+        <section>
+            <div class="container">
+                <h3 style="font-family: 'Dancing Script'; color: var(--pink); font-size: 2.5rem;">Músicas que lembram a gente</h3>
+                <div class="interaction-box">
+                    <input type="text" id="musicName" style="width:100%; background:none; border:none; border-bottom:1px solid var(--pink); color:white; margin-bottom:10px;" placeholder="Nome da música...">
+                    <input type="text" id="musicLink" style="width:100%; background:none; border:none; border-bottom:1px solid var(--pink); color:white;" placeholder="Link do YouTube...">
+                    <button class="btn-custom" onclick="addMusic()">SALVAR MÚSICA</button>
+                    <div id="playlistContainer" style="margin-top:15px; text-align:left;"></div>
+                </div>
             </div>
         </section>
 
@@ -125,8 +142,8 @@
                 <h3 style="font-family: 'Dancing Script'; color: var(--pink); font-size: 2.5rem;">Planos Futuros</h3>
                 <div class="interaction-box">
                     <input type="text" id="wishInput" style="width:100%; background:none; border:none; border-bottom:2px solid var(--pink); color:white; text-align:center;" placeholder="Novo sonho...">
-                    <button class="btn-custom" onclick="addWish()">ADICIONAR</button>
-                    <div id="wishList" style="text-align:left; margin-top:10px;"></div>
+                    <button class="btn-custom" onclick="addWish()">ADICIONAR PLANO</button>
+                    <div id="wishList" style="text-align:left; margin-top:15px;"></div>
                 </div>
             </div>
         </section>
@@ -170,7 +187,7 @@
                     <button class="btn-custom" onclick="document.getElementById('imgUpload').click()">ESCOLHER FOTO</button>
                     <img id="photoPreview">
                     <textarea id="photoDesc" style="width:100%; background:none; border:1px solid var(--pink); color:white; border-radius:10px; margin-top:10px; padding:10px;" placeholder="Descrição..."></textarea>
-                    <button class="btn-custom" onclick="savePhoto()">REGISTRAR MOMENTO</button>
+                    <button class="btn-custom" onclick="savePhoto()">REGISTRAR NO ÁLBUM</button>
                 </div>
                 <div id="albumContainer"></div>
             </div>
@@ -193,7 +210,7 @@
 
     <script>
         let currentSlide = 0;
-        const totalSlides = 10; // 11 seções (0 a 10)
+        const totalSlides = 11;
         const slider = document.getElementById('mainSlider');
 
         function move(step) {
@@ -201,6 +218,7 @@
             slider.style.transform = `translateX(-${currentSlide * 100}vw)`;
         }
 
+        // --- CONTADOR ---
         const startDate = new Date('2025-06-15T00:00:00');
         function updateTimer() {
             const diff = new Date() - startDate;
@@ -210,25 +228,93 @@
         }
         setInterval(updateTimer, 1000); updateTimer();
 
-        let money = 0;
-        function addMoney() { 
-            let v = parseFloat(document.getElementById('moneyInput').value); 
-            if(!isNaN(v)){ 
-                money+=v; 
-                document.getElementById('currentMoney').innerText=money; 
-                document.getElementById('bar').style.width=Math.min((money/5000)*100,100)+"%"; 
-            } 
+        // --- O QUE MAIS GOSTO ---
+        function checkLove() {
+            const val = document.getElementById('userInput').value.toLowerCase();
+            if(val.length > 2) { document.getElementById('loveResponse').style.display = 'block'; } 
+            else { document.getElementById('loveResponse').style.display = 'none'; }
         }
 
-        function addWish() { let v = document.getElementById('wishInput').value; if(v){ let d=document.createElement('div'); d.innerText="• "+v; document.getElementById('wishList').appendChild(d); document.getElementById('wishInput').value=""; } }
-        function addIssue() { let v = document.getElementById('issueInput').value; if(v){ let d=document.createElement('div'); d.innerText="• "+v; document.getElementById('issueList').appendChild(d); document.getElementById('issueInput').value=""; } }
-        
-        const q1 = ["Quem é mais provável de chorar?", "Quem é mais teimoso?", "Quem esquece as chaves?", "Quem pede desculpas primeiro?", "Quem é mais ciumento?"];
-        function nextQuestion() { document.getElementById('gameQuestion').innerText = q1[Math.floor(Math.random()*q1.length)]; }
-        
-        const q2 = ["Onde foi o primeiro beijo?", "Nossa música?", "Qual a data que começamos a conversar?", "Qual minha comida favorita?"];
-        function nextMemory() { document.getElementById('memoryQuestion').innerText = q2[Math.floor(Math.random()*q2.length)]; }
+        // --- SALVAMENTO NO LOCALSTORAGE ---
 
+        // Cofre
+        let money = parseFloat(localStorage.getItem('cofre_total') || 0);
+        function updateCofreUI() {
+            document.getElementById('currentMoney').innerText = money.toFixed(2);
+            document.getElementById('bar').style.width = Math.min((money/5000)*100, 100) + "%";
+        }
+        function addMoney() {
+            let v = parseFloat(document.getElementById('moneyInput').value);
+            if(!isNaN(v)){
+                money += v;
+                localStorage.setItem('cofre_total', money);
+                updateCofreUI();
+                document.getElementById('moneyInput').value = "";
+            }
+        }
+
+        // Planos Futuros
+        let wishes = JSON.parse(localStorage.getItem('planos_lista') || '[]');
+        function addWish() {
+            let text = document.getElementById('wishInput').value;
+            if(text) {
+                wishes.push({ text: text, done: false });
+                saveAndRenderWishes();
+                document.getElementById('wishInput').value = "";
+            }
+        }
+        function toggleWish(index) {
+            wishes[index].done = !wishes[index].done;
+            saveAndRenderWishes();
+        }
+        function saveAndRenderWishes() {
+            localStorage.setItem('planos_lista', JSON.stringify(wishes));
+            document.getElementById('wishList').innerHTML = wishes.map((w, i) => `
+                <div class="list-item ${w.done ? 'done' : ''}">
+                    <span>• ${w.text}</span>
+                    <button class="check-btn" onclick="toggleWish(${i})">${w.done ? 'Refazer' : 'Feito'}</button>
+                </div>
+            `).join('');
+        }
+
+        // Espaço do Diálogo
+        let issues = JSON.parse(localStorage.getItem('dialogo_lista') || '[]');
+        function addIssue() {
+            let text = document.getElementById('issueInput').value;
+            if(text) {
+                issues.push(text);
+                localStorage.setItem('dialogo_lista', JSON.stringify(issues));
+                renderIssues();
+                document.getElementById('issueInput').value = "";
+            }
+        }
+        function renderIssues() {
+            document.getElementById('issueList').innerHTML = issues.map(i => `<div class="list-item"><span>• ${i}</span></div>`).join('');
+        }
+
+        // Playlist YouTube
+        let playlist = JSON.parse(localStorage.getItem('playlist_amor') || '[]');
+        function addMusic() {
+            let name = document.getElementById('musicName').value;
+            let link = document.getElementById('musicLink').value;
+            if(name && link) {
+                playlist.push({ name: name, link: link });
+                localStorage.setItem('playlist_amor', JSON.stringify(playlist));
+                renderPlaylist();
+                document.getElementById('musicName').value = "";
+                document.getElementById('musicLink').value = "";
+            }
+        }
+        function renderPlaylist() {
+            document.getElementById('playlistContainer').innerHTML = playlist.map(m => `
+                <div class="music-card">
+                    <strong>${m.name}</strong><br>
+                    <a href="${m.link}" target="_blank" style="color:var(--pink); font-size:0.8rem;">Clique para ouvir no YouTube</a>
+                </div>
+            `).join('');
+        }
+
+        // --- ÁLBUM ---
         const imgInp = document.getElementById('imgUpload');
         const imgPre = document.getElementById('photoPreview');
         let selectedBase64 = "";
@@ -238,26 +324,35 @@
             reader.onloadend = () => { selectedBase64 = reader.result; imgPre.src = selectedBase64; imgPre.style.display = 'block'; };
             if(file) reader.readAsDataURL(file);
         }
-
         function savePhoto() {
             const desc = document.getElementById('photoDesc').value;
             if(desc && selectedBase64) {
-                const moment = { img: selectedBase64, text: desc };
                 const album = JSON.parse(localStorage.getItem('album_maria') || '[]');
-                album.push(moment);
+                album.push({ img: selectedBase64, text: desc });
                 localStorage.setItem('album_maria', JSON.stringify(album));
                 renderAlbum();
                 document.getElementById('photoDesc').value = ""; imgPre.style.display = 'none';
             }
         }
-
         function renderAlbum() {
             const album = JSON.parse(localStorage.getItem('album_maria') || '[]');
-            document.getElementById('albumContainer').innerHTML = album.map(m => `
-                <div class="album-card"><img src="${m.img}" style="width:100%; border-radius:10px;"><p>${m.text}</p></div>
-            `).reverse().join('');
+            document.getElementById('albumContainer').innerHTML = album.map(m => `<div class="album-card"><img src="${m.img}" style="width:100%; border-radius:10px;"><p>${m.text}</p></div>`).reverse().join('');
         }
-        window.onload = renderAlbum;
+
+        // --- INICIALIZAÇÃO ---
+        window.onload = () => {
+            updateCofreUI();
+            saveAndRenderWishes();
+            renderIssues();
+            renderPlaylist();
+            renderAlbum();
+        };
+
+        // Jogos e Canvas (Mantidos)
+        const q1 = ["Quem é mais provável de chorar?", "Quem é mais teimoso?", "Quem esquece as chaves?", "Quem é mais ciumento?"];
+        function nextQuestion() { document.getElementById('gameQuestion').innerText = q1[Math.floor(Math.random()*q1.length)]; }
+        const q2 = ["Onde foi o primeiro beijo?", "Nossa música?", "Nossa data?"];
+        function nextMemory() { document.getElementById('memoryQuestion').innerText = q2[Math.floor(Math.random()*q2.length)]; }
 
         const canvas = document.getElementById('skyCanvas'); const ctx = canvas.getContext('2d');
         canvas.width = window.innerWidth; canvas.height = window.innerHeight;
