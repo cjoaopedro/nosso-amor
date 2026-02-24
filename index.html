@@ -71,39 +71,46 @@
     <div class="slider" id="mainSlider">
         <section>
             <div class="container">
-                <div class="photo-frame"><img src="foto1.jpeg"></div>
+                <div class="photo-frame">
+                    <img src="foto1.jpeg" onerror="this.src='foto1.jpg'">
+                </div>
                 <h2>João & Maria</h2>
-                <p class="love-text">Sabe, minha princesa, eu sempre acreditei que algumas histórias já nascem escritas nas estrelas. Somos João e Maria, mas nossa história é muito melhor que a dos livros. No nosso mundo real, nem tudo são flores, mas é justamente a nossa união que nos faz superar qualquer desafio. Você é a minha vida, o encaixe exato de tudo o que eu sempre sonhei sem nem saber que existia. Nesses 8 meses, cada risada e cada plano confirmam que fomos feitos um para o outro.</p>
+                <p class="love-text">Sabe, minha princesa, eu sempre acreditei que algumas histórias já nascem escritas nas estrelas. Somos João e Maria, mas nossa história é muito melhor que a dos livros. No nosso mundo real, nem tudo são flores, mas é justamente a nossa união que nos faz superar qualquer desafio.</p>
             </div>
         </section>
 
         <section>
             <div class="container">
-                <div class="photo-frame"><img src="foto2.jpeg"></div>
+                <div class="photo-frame">
+                    <img src="foto2.jpeg" onerror="this.src='foto2.jpg'">
+                </div>
                 <div class="counter-grid" id="timer"></div>
-                <p class="love-text">Amar você não é sorte, é a melhor decisão que eu tomo todas as manhãs ao despertar. São 8 meses de cumplicidade, onde o tempo parece voar e parar ao mesmo tempo quando estou com você.</p>
+                <p class="love-text">Amar você não é sorte, é a melhor decisão que eu tomo todas as manhãs ao despertar.</p>
             </div>
         </section>
 
         <section>
             <div class="container">
-                <div class="photo-frame"><img src="foto3.jpeg"></div>
+                <div class="photo-frame">
+                    <img src="foto3.jpeg" onerror="this.src='foto3.jpg'">
+                </div>
                 <div class="interaction-box">
                     <h3 style="font-family: 'Dancing Script'; color: var(--pink); font-size: 2rem;">O que eu mais gosto em você?</h3>
                     <input type="text" id="userInput" style="width:100%; background:none; border:none; border-bottom:2px solid var(--pink); color:white; text-align:center; padding:10px;" placeholder="Escreva aqui...">
-                    <p id="responseMsg"></p>
                 </div>
-                <p class="love-text">A verdade é que eu gosto de absolutamente TUDO em você. Gosto do seu jeito de me olhar, da paz que seu abraço me traz e de como você consegue ser linda até brava.</p>
+                <p class="love-text">Gosto do seu jeito de me olhar, da paz que seu abraço me traz e de como você consegue ser linda até brava.</p>
             </div>
         </section>
 
         <section>
             <div class="container">
-                <div class="photo-frame"><img src="foto4.jpeg"></div>
+                <div class="photo-frame">
+                    <img src="foto4.jpeg" onerror="this.src='foto4.jpg'">
+                </div>
                 <div class="interaction-box" style="border-radius: 50px;">
                     <a href="https://youtu.be/LyaEnoiIwPs?si=o65aKWNHzU_EEtSd" target="_blank" style="color: white; text-decoration: none; font-weight: bold;">🎵 TOQUE AQUI PARA OUVIR NOSSA MÚSICA ❤️</a>
                 </div>
-                <p class="love-text">"Pra falar do amor de dois, a gente tem que ser um só". duas metades que se encontraram e descobriram que a vida é muito melhor quando compartilhada.</p>
+                <p class="love-text">"Pra falar do amor de dois, a gente tem que ser um só".</p>
             </div>
         </section>
 
@@ -119,66 +126,12 @@
             </div>
         </section>
 
-        <section>
-            <div class="container">
-                <h3 style="font-family: 'Dancing Script'; color: var(--pink); font-size: 2.5rem;">Planos Futuros</h3>
-                <div class="interaction-box">
-                    <input type="text" id="wishInput" style="width:100%; background:none; border:none; border-bottom:2px solid var(--pink); color:white; text-align:center;" placeholder="Novo sonho...">
-                    <button class="btn-custom" onclick="addWish()">ADICIONAR</button>
-                    <div id="wishList" style="text-align:left; margin-top:10px;"></div>
-                </div>
-            </div>
-        </section>
-
-        <section>
-            <div class="container">
-                <h3 style="font-family: 'Dancing Script'; color: var(--gold); font-size: 2.5rem;">Espaço do Diálogo</h3>
-                <div class="interaction-box" style="border-style: dashed;">
-                    <textarea id="issueInput" style="width:100%; background:none; border:1px solid var(--gold); color:white; border-radius:10px; padding:10px;" placeholder="Algo incomodou?"></textarea>
-                    <button class="btn-custom" onclick="addIssue()">REGISTRAR</button>
-                    <div id="issueList" style="text-align:left; margin-top:10px;"></div>
-                </div>
-            </div>
-        </section>
-
-        <section>
-            <div class="container">
-                <h3 style="font-family: 'Dancing Script'; color: var(--pink); font-size: 2.5rem;">Quem é mais provável?</h3>
-                <div class="interaction-box">
-                    <p id="gameQuestion" style="min-height: 80px;">Clique abaixo!</p>
-                    <button class="btn-custom" onclick="nextQuestion()">PRÓXIMA PERGUNTA</button>
-                </div>
-            </div>
-        </section>
-
-        <section>
-            <div class="container">
-                <h3 style="font-family: 'Dancing Script'; color: var(--gold); font-size: 2.5rem;">Nossa Memória</h3>
-                <div class="interaction-box">
-                    <h4 id="memoryQuestion" style="min-height: 60px;">Onde foi nosso primeiro beijo?</h4>
-                    <button class="btn-custom" onclick="nextMemory()">OUTRO DESAFIO</button>
-                </div>
-            </div>
-        </section>
-
-        <section>
-            <div class="container">
-                <h3 style="font-family: 'Dancing Script'; color: var(--pink); font-size: 2.5rem;">Nosso Álbum</h3>
-                <div class="interaction-box">
-                    <input type="file" id="imgUpload" accept="image/*" style="display: none;">
-                    <button class="btn-custom" onclick="document.getElementById('imgUpload').click()">ESCOLHER FOTO</button>
-                    <img id="photoPreview">
-                    <textarea id="photoDesc" style="width:100%; background:none; border:1px solid var(--pink); color:white; border-radius:10px; margin-top:10px; padding:10px;" placeholder="Nesse dia eu fiquei feliz porque..."></textarea>
-                    <button class="btn-custom" onclick="savePhoto()">REGISTRAR MOMENTO</button>
-                </div>
-                <div id="albumContainer"></div>
-            </div>
-        </section>
-
         <section id="sky-page">
             <canvas id="skyCanvas"></canvas>
             <div class="container" style="z-index: 20;">
-                <div class="photo-frame" style="width: 180px; height: 180px;"><img src="foto5.jpeg"></div>
+                <div class="photo-frame" style="width: 180px; height: 180px;">
+                    <img src="foto5.jpeg" onerror="this.src='foto5.jpg'">
+                </div>
                 <h2 style="color: white; font-size: 2rem;">O Céu de 05/07/2025</h2>
                 <div style="font-family: 'Dancing Script'; font-size: 3rem; color: var(--gold);">Sempre Nós</div>
             </div>
@@ -192,66 +145,40 @@
 
     <script>
         let currentSlide = 0;
-        const totalSlides = 10;
+        const totalSlides = 5; // Ajustado para a quantidade de seções
         const slider = document.getElementById('mainSlider');
 
         function move(step) {
             currentSlide = Math.max(0, Math.min(totalSlides, currentSlide + step));
-            slider.style.transform = `translateX(-${currentSlide * (100 / 11)}%)`;
+            slider.style.transform = `translateX(-${currentSlide * (100 / (totalSlides + 1))}%)`;
         }
 
-        const startDate = new Date('2024-06-15T00:00:00'); // Data ajustada para contar 8 meses corretamente
+        const startDate = new Date('2024-06-15T00:00:00');
         function updateTimer() {
             const diff = new Date() - startDate;
-            const d = Math.floor(diff / 86400000); const h = Math.floor((diff / 3600000) % 24);
-            const m = Math.floor((diff / 60000) % 60); const s = Math.floor((diff / 1000) % 60);
-            document.getElementById('timer').innerHTML = `<div class="counter-item"><span>${d}</span><label>Dias</label></div><div class="counter-item"><span>${h}</span><label>Horas</label></div><div class="counter-item"><span>${m}</span><label>Min</label></div><div class="counter-item"><span>${s}</span><label>Seg</label></div>`;
+            const d = Math.floor(diff / 86400000); 
+            const h = Math.floor((diff / 3600000) % 24);
+            const m = Math.floor((diff / 60000) % 60); 
+            const s = Math.floor((diff / 1000) % 60);
+            const timerEl = document.getElementById('timer');
+            if(timerEl) timerEl.innerHTML = `<div class="counter-item"><span>${d}</span><label>Dias</label></div><div class="counter-item"><span>${h}</span><label>Horas</label></div><div class="counter-item"><span>${m}</span><label>Min</label></div><div class="counter-item"><span>${s}</span><label>Seg</label></div>`;
         }
         setInterval(updateTimer, 1000); updateTimer();
 
-        const imgInp = document.getElementById('imgUpload');
-        const imgPre = document.getElementById('photoPreview');
-        let selectedBase64 = "";
-
-        imgInp.onchange = e => {
-            const file = e.target.files[0];
-            const reader = new FileReader();
-            reader.onloadend = () => { selectedBase64 = reader.result; imgPre.src = selectedBase64; imgPre.style.display = 'block'; };
-            if(file) reader.readAsDataURL(file);
-        }
-
-        function savePhoto() {
-            const desc = document.getElementById('photoDesc').value;
-            if(desc && selectedBase64) {
-                const moment = { img: selectedBase64, text: desc, id: Date.now() };
-                const album = JSON.parse(localStorage.getItem('album_maria') || '[]');
-                album.push(moment);
-                localStorage.setItem('album_maria', JSON.stringify(album));
-                renderAlbum();
-                document.getElementById('photoDesc').value = ""; imgPre.style.display = 'none';
-            }
-        }
-
-        function renderAlbum() {
-            const album = JSON.parse(localStorage.getItem('album_maria') || '[]');
-            document.getElementById('albumContainer').innerHTML = album.map(m => `
-                <div class="album-card"><img src="${m.img}" style="width:100%; border-radius:10px;"><p>${m.text}</p></div>
-            `).reverse().join('');
-        }
-        window.onload = renderAlbum;
-
         let money = 0;
-        function addMoney() { let v = parseFloat(document.getElementById('moneyInput').value); if(!isNaN(v)){ money+=v; document.getElementById('currentMoney').innerText=money; document.getElementById('bar').style.width=Math.min((money/5000)*100,100)+"%"; } }
-        function addWish() { let v = document.getElementById('wishInput').value; if(v){ let d=document.createElement('div'); d.innerText="• "+v; document.getElementById('wishList').appendChild(d); } }
-        function addIssue() { let v = document.getElementById('issueInput').value; if(v){ let d=document.createElement('div'); d.innerText="• "+v; document.getElementById('issueList').appendChild(d); } }
-        const q1 = ["Quem é mais provável de chorar?", "Quem é mais teimoso?", "Quem esquece as chaves?"];
-        function nextQuestion() { document.getElementById('gameQuestion').innerText = q1[Math.floor(Math.random()*q1.length)]; }
-        const q2 = ["Onde foi o primeiro beijo?", "Nossa música?"];
-        function nextMemory() { document.getElementById('memoryQuestion').innerText = q2[Math.floor(Math.random()*q2.length)]; }
+        function addMoney() { 
+            let v = parseFloat(document.getElementById('moneyInput').value); 
+            if(!isNaN(v)){ 
+                money+=v; 
+                document.getElementById('currentMoney').innerText=money; 
+                document.getElementById('bar').style.width=Math.min((money/5000)*100,100)+"%"; 
+            } 
+        }
 
         const canvas = document.getElementById('skyCanvas'); const ctx = canvas.getContext('2d');
-        canvas.width = window.innerWidth; canvas.height = window.innerHeight;
-        const stars = Array.from({length: 100}, () => ({ x: Math.random()*canvas.width, y: Math.random()*canvas.height, size: Math.random()*1.5 }));
+        function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        window.onresize = resize; resize();
+        const stars = Array.from({length: 100}, () => ({ x: Math.random()*window.innerWidth, y: Math.random()*window.innerHeight, size: Math.random()*1.5 }));
         function draw() { ctx.clearRect(0,0,canvas.width,canvas.height); ctx.fillStyle="white"; stars.forEach(s => { ctx.beginPath(); ctx.arc(s.x,s.y,s.size,0,Math.PI*2); ctx.fill(); }); requestAnimationFrame(draw); }
         draw();
     </script>
