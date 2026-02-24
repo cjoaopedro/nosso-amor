@@ -217,29 +217,18 @@
             slider.style.transform = `translateX(-${currentSlide * 100}vw)`;
         }
 
-        // --- CONTADOR CORRIGIDO ---
-        // Definindo a data inicial (15 de Junho de 2025 às 00:00:00)
+        // --- CONTADOR ---
         const startDate = new Date('2025-06-15T00:00:00');
-
         function updateTimer() {
-            const now = new Date();
-            const diff = now - startDate;
-
-            // Cálculos
-            const d = Math.floor(diff / (1000 * 60 * 60 * 24));
-            const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-            const s = Math.floor((diff % (1000 * 60)) / 1000);
-
-            document.getElementById('timer').innerHTML = `
-                <div class="counter-item"><span>${d}</span><label>Dias</label></div>
-                <div class="counter-item"><span>${h}</span><label>Horas</label></div>
-                <div class="counter-item"><span>${m}</span><label>Min</label></div>
-                <div class="counter-item"><span>${s}</span><label>Seg</label></div>
-            `;
+            const diff = new Date() - startDate;
+            // Cálculo corrigido para pegar o resto exato de horas/minutos do dia atual
+            const d = Math.floor(diff / 86400000); 
+            const h = Math.floor((diff % 86400000) / 3600000);
+            const m = Math.floor((diff % 3600000) / 60000); 
+            const s = Math.floor((diff % 60000) / 1000);
+            document.getElementById('timer').innerHTML = `<div class="counter-item"><span>${d}</span><label>Dias</label></div><div class="counter-item"><span>${h}</span><label>Horas</label></div><div class="counter-item"><span>${m}</span><label>Min</label></div><div class="counter-item"><span>${s}</span><label>Seg</label></div>`;
         }
-        setInterval(updateTimer, 1000); 
-        updateTimer();
+        setInterval(updateTimer, 1000); updateTimer();
 
         // --- O QUE MAIS GOSTO ---
         function checkLove() {
