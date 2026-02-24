@@ -15,8 +15,9 @@
             overflow: hidden;
         }
 
+        /* Ajustado para 600vw (6 seções de 100vw cada) para não bugar o deslize */
         .slider { 
-            display: flex; width: 1100%; height: 100vh;
+            display: flex; width: 600vw; height: 100vh;
             transition: transform 0.6s cubic-bezier(0.45, 0, 0.55, 1);
         }
 
@@ -51,18 +52,19 @@
             position: fixed; bottom: 25px; left: 0; width: 100%;
             display: flex; justify-content: center; gap: 20px; z-index: 9999;
         }
+
+        /* Botão transparente para permitir leitura do fundo */
         .nav-btn {
-            background: var(--pink); color: white; text-decoration: none;
-            padding: 18px 30px; border-radius: 15px; font-weight: bold;
-            font-size: 1.1rem; box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-            min-width: 140px; text-align: center; display: inline-block;
+            background: rgba(255, 77, 109, 0.4); 
+            backdrop-filter: blur(4px);
+            color: white; text-decoration: none;
+            padding: 15px 25px; border-radius: 15px; font-weight: bold;
+            font-size: 1.1rem; box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            min-width: 130px; text-align: center; display: inline-block;
+            border: 1px solid rgba(255,255,255,0.1);
         }
 
         .btn-custom { background: var(--pink); border: none; color: white; padding: 12px 20px; border-radius: 50px; cursor: pointer; font-weight: bold; margin-top: 10px; width: 100%; }
-
-        #photoPreview { width: 100%; max-height: 200px; object-fit: contain; margin-top: 15px; border-radius: 10px; display: none; border: 1px solid var(--gold); }
-        .album-card { background: rgba(255,255,255,0.1); padding: 15px; border-radius: 15px; margin-top: 15px; border-left: 5px solid var(--pink); text-align: left; }
-        
         canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 5; pointer-events: none; }
     </style>
 </head>
@@ -71,46 +73,38 @@
     <div class="slider" id="mainSlider">
         <section>
             <div class="container">
-                <div class="photo-frame">
-                    <img src="foto1.jpeg" onerror="this.src='foto1.jpg'">
-                </div>
+                <div class="photo-frame"><img src="foto1.jpeg"></div>
                 <h2>João & Maria</h2>
-                <p class="love-text">Sabe, minha princesa, eu sempre acreditei que algumas histórias já nascem escritas nas estrelas. Somos João e Maria, mas nossa história é muito melhor que a dos livros. No nosso mundo real, nem tudo são flores, mas é justamente a nossa união que nos faz superar qualquer desafio.</p>
+                <p class="love-text">Sabe, minha princesa, eu sempre acreditei que algumas histórias já nascem escritas nas estrelas. Somos João e Maria, mas nossa história é muito melhor que a dos livros. No nosso mundo real, nem tudo são flores, mas é justamente a nossa união que nos faz superar qualquer desafio. Você é a minha vida, o encaixe exato de tudo o que eu sempre sonhei sem nem saber que existia. Nesses 8 meses, cada risada e cada plano confirmam que fomos feitos um para o outro. E mesmo que a gente não viva em um conto de fadas, o nosso amor real traz a única frase de ficção que eu faço questão de realizar com você: o nosso "felizes para sempre."</p>
             </div>
         </section>
 
         <section>
             <div class="container">
-                <div class="photo-frame">
-                    <img src="foto2.jpeg" onerror="this.src='foto2.jpg'">
-                </div>
+                <div class="photo-frame"><img src="foto2.jpeg"></div>
                 <div class="counter-grid" id="timer"></div>
-                <p class="love-text">Amar você não é sorte, é a melhor decisão que eu tomo todas as manhãs ao despertar.</p>
+                <p class="love-text">Amar você não é sorte, é a melhor decisão que eu tomo todas as manhãs ao despertar. São 8 meses de cumplicidade, onde o tempo parece voar e parar ao mesmo tempo quando estou com você.</p>
             </div>
         </section>
 
         <section>
             <div class="container">
-                <div class="photo-frame">
-                    <img src="foto3.jpeg" onerror="this.src='foto3.jpg'">
-                </div>
+                <div class="photo-frame"><img src="foto3.jpeg"></div>
                 <div class="interaction-box">
                     <h3 style="font-family: 'Dancing Script'; color: var(--pink); font-size: 2rem;">O que eu mais gosto em você?</h3>
                     <input type="text" id="userInput" style="width:100%; background:none; border:none; border-bottom:2px solid var(--pink); color:white; text-align:center; padding:10px;" placeholder="Escreva aqui...">
                 </div>
-                <p class="love-text">Gosto do seu jeito de me olhar, da paz que seu abraço me traz e de como você consegue ser linda até brava.</p>
+                <p class="love-text">A verdade é que eu gosto de absolutamente TUDO em você. Gosto do seu jeito de me olhar, da paz que seu abraço me traz e de como você consegue ser linda até brava.</p>
             </div>
         </section>
 
         <section>
             <div class="container">
-                <div class="photo-frame">
-                    <img src="foto4.jpeg" onerror="this.src='foto4.jpg'">
-                </div>
+                <div class="photo-frame"><img src="foto4.jpeg"></div>
                 <div class="interaction-box" style="border-radius: 50px;">
                     <a href="https://youtu.be/LyaEnoiIwPs?si=o65aKWNHzU_EEtSd" target="_blank" style="color: white; text-decoration: none; font-weight: bold;">🎵 TOQUE AQUI PARA OUVIR NOSSA MÚSICA ❤️</a>
                 </div>
-                <p class="love-text">"Pra falar do amor de dois, a gente tem que ser um só".</p>
+                <p class="love-text">"Pra falar do amor de dois, a gente tem que ser um só". duas metades que se encontraram e descobriram que a vida é muito melhor quando compartilhada.</p>
             </div>
         </section>
 
@@ -129,9 +123,7 @@
         <section id="sky-page">
             <canvas id="skyCanvas"></canvas>
             <div class="container" style="z-index: 20;">
-                <div class="photo-frame" style="width: 180px; height: 180px;">
-                    <img src="foto5.jpeg" onerror="this.src='foto5.jpg'">
-                </div>
+                <div class="photo-frame" style="width: 180px; height: 180px;"><img src="foto5.jpeg"></div>
                 <h2 style="color: white; font-size: 2rem;">O Céu de 05/07/2025</h2>
                 <div style="font-family: 'Dancing Script'; font-size: 3rem; color: var(--gold);">Sempre Nós</div>
             </div>
@@ -145,23 +137,21 @@
 
     <script>
         let currentSlide = 0;
-        const totalSlides = 5; // Ajustado para a quantidade de seções
+        const totalSlides = 5; // Total de 6 seções (0 a 5)
         const slider = document.getElementById('mainSlider');
 
         function move(step) {
             currentSlide = Math.max(0, Math.min(totalSlides, currentSlide + step));
-            slider.style.transform = `translateX(-${currentSlide * (100 / (totalSlides + 1))}%)`;
+            // Multiplica por 100 para alinhar perfeitamente em cada tela
+            slider.style.transform = `translateX(-${currentSlide * 100}vw)`;
         }
 
         const startDate = new Date('2024-06-15T00:00:00');
         function updateTimer() {
             const diff = new Date() - startDate;
-            const d = Math.floor(diff / 86400000); 
-            const h = Math.floor((diff / 3600000) % 24);
-            const m = Math.floor((diff / 60000) % 60); 
-            const s = Math.floor((diff / 1000) % 60);
-            const timerEl = document.getElementById('timer');
-            if(timerEl) timerEl.innerHTML = `<div class="counter-item"><span>${d}</span><label>Dias</label></div><div class="counter-item"><span>${h}</span><label>Horas</label></div><div class="counter-item"><span>${m}</span><label>Min</label></div><div class="counter-item"><span>${s}</span><label>Seg</label></div>`;
+            const d = Math.floor(diff / 86400000); const h = Math.floor((diff / 3600000) % 24);
+            const m = Math.floor((diff / 60000) % 60); const s = Math.floor((diff / 1000) % 60);
+            document.getElementById('timer').innerHTML = `<div class="counter-item"><span>${d}</span><label>Dias</label></div><div class="counter-item"><span>${h}</span><label>Horas</label></div><div class="counter-item"><span>${m}</span><label>Min</label></div><div class="counter-item"><span>${s}</span><label>Seg</label></div>`;
         }
         setInterval(updateTimer, 1000); updateTimer();
 
@@ -176,9 +166,8 @@
         }
 
         const canvas = document.getElementById('skyCanvas'); const ctx = canvas.getContext('2d');
-        function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
-        window.onresize = resize; resize();
-        const stars = Array.from({length: 100}, () => ({ x: Math.random()*window.innerWidth, y: Math.random()*window.innerHeight, size: Math.random()*1.5 }));
+        canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+        const stars = Array.from({length: 100}, () => ({ x: Math.random()*canvas.width, y: Math.random()*canvas.height, size: Math.random()*1.5 }));
         function draw() { ctx.clearRect(0,0,canvas.width,canvas.height); ctx.fillStyle="white"; stars.forEach(s => { ctx.beginPath(); ctx.arc(s.x,s.y,s.size,0,Math.PI*2); ctx.fill(); }); requestAnimationFrame(draw); }
         draw();
     </script>
