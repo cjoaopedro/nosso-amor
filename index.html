@@ -63,7 +63,6 @@
 
         .btn-custom { background: var(--pink); border: none; color: white; padding: 12px 20px; border-radius: 50px; cursor: pointer; font-weight: bold; margin-top: 10px; width: 100%; }
         
-        /* Estilos Novos */
         .list-item { background: rgba(255,255,255,0.1); padding: 10px; margin-top: 5px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; }
         .done { text-decoration: line-through; opacity: 0.5; }
         .check-btn { background: #4caf50; border: none; color: white; border-radius: 5px; padding: 5px 10px; cursor: pointer; }
@@ -218,15 +217,29 @@
             slider.style.transform = `translateX(-${currentSlide * 100}vw)`;
         }
 
-        // --- CONTADOR ---
+        // --- CONTADOR CORRIGIDO ---
+        // Definindo a data inicial (15 de Junho de 2025 às 00:00:00)
         const startDate = new Date('2025-06-15T00:00:00');
+
         function updateTimer() {
-            const diff = new Date() - startDate;
-            const d = Math.floor(diff / 86400000); const h = Math.floor((diff / 3600000) % 24);
-            const m = Math.floor((diff / 60000) % 60); const s = Math.floor((diff / 1000) % 60);
-            document.getElementById('timer').innerHTML = `<div class="counter-item"><span>${d}</span><label>Dias</label></div><div class="counter-item"><span>${h}</span><label>Horas</label></div><div class="counter-item"><span>${m}</span><label>Min</label></div><div class="counter-item"><span>${s}</span><label>Seg</label></div>`;
+            const now = new Date();
+            const diff = now - startDate;
+
+            // Cálculos
+            const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const s = Math.floor((diff % (1000 * 60)) / 1000);
+
+            document.getElementById('timer').innerHTML = `
+                <div class="counter-item"><span>${d}</span><label>Dias</label></div>
+                <div class="counter-item"><span>${h}</span><label>Horas</label></div>
+                <div class="counter-item"><span>${m}</span><label>Min</label></div>
+                <div class="counter-item"><span>${s}</span><label>Seg</label></div>
+            `;
         }
-        setInterval(updateTimer, 1000); updateTimer();
+        setInterval(updateTimer, 1000); 
+        updateTimer();
 
         // --- O QUE MAIS GOSTO ---
         function checkLove() {
