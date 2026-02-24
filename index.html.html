@@ -71,7 +71,7 @@
     <div class="slider" id="mainSlider">
         <section>
             <div class="container">
-                <div class="photo-frame"><img src="https://i.ibb.co/4n5csc1B/image.jpg"></div>
+                <div class="photo-frame"><img src="foto1.jpeg"></div>
                 <h2>João & Maria</h2>
                 <p class="love-text">Sabe, minha princesa, eu sempre acreditei que algumas histórias já nascem escritas nas estrelas. Somos João e Maria, mas nossa história é muito melhor que a dos livros. No nosso mundo real, nem tudo são flores, mas é justamente a nossa união que nos faz superar qualquer desafio. Você é a minha vida, o encaixe exato de tudo o que eu sempre sonhei sem nem saber que existia. Nesses 8 meses, cada risada e cada plano confirmam que fomos feitos um para o outro.</p>
             </div>
@@ -79,7 +79,7 @@
 
         <section>
             <div class="container">
-                <div class="photo-frame"><img src="https://i.ibb.co/3Y1Hd7DV/image.jpg"></div>
+                <div class="photo-frame"><img src="foto2.jpeg"></div>
                 <div class="counter-grid" id="timer"></div>
                 <p class="love-text">Amar você não é sorte, é a melhor decisão que eu tomo todas as manhãs ao despertar. São 8 meses de cumplicidade, onde o tempo parece voar e parar ao mesmo tempo quando estou com você.</p>
             </div>
@@ -87,7 +87,7 @@
 
         <section>
             <div class="container">
-                <div class="photo-frame"><img src="https://i.ibb.co/Y4wLHtJ3/image.jpg"></div>
+                <div class="photo-frame"><img src="foto3.jpeg"></div>
                 <div class="interaction-box">
                     <h3 style="font-family: 'Dancing Script'; color: var(--pink); font-size: 2rem;">O que eu mais gosto em você?</h3>
                     <input type="text" id="userInput" style="width:100%; background:none; border:none; border-bottom:2px solid var(--pink); color:white; text-align:center; padding:10px;" placeholder="Escreva aqui...">
@@ -99,7 +99,7 @@
 
         <section>
             <div class="container">
-                <div class="photo-frame"><img src="https://i.ibb.co/FbHHFRDy/image.jpg"></div>
+                <div class="photo-frame"><img src="foto4.jpeg"></div>
                 <div class="interaction-box" style="border-radius: 50px;">
                     <a href="https://youtu.be/LyaEnoiIwPs?si=o65aKWNHzU_EEtSd" target="_blank" style="color: white; text-decoration: none; font-weight: bold;">🎵 TOQUE AQUI PARA OUVIR NOSSA MÚSICA ❤️</a>
                 </div>
@@ -178,7 +178,7 @@
         <section id="sky-page">
             <canvas id="skyCanvas"></canvas>
             <div class="container" style="z-index: 20;">
-                <div class="photo-frame" style="width: 180px; height: 180px;"><img src="https://i.ibb.co/1Ypg5s6m/image.jpg"></div>
+                <div class="photo-frame" style="width: 180px; height: 180px;"><img src="foto5.jpeg"></div>
                 <h2 style="color: white; font-size: 2rem;">O Céu de 05/07/2025</h2>
                 <div style="font-family: 'Dancing Script'; font-size: 3rem; color: var(--gold);">Sempre Nós</div>
             </div>
@@ -200,7 +200,7 @@
             slider.style.transform = `translateX(-${currentSlide * (100 / 11)}%)`;
         }
 
-        const startDate = new Date('2025-06-15T00:00:00');
+        const startDate = new Date('2024-06-15T00:00:00'); // Data ajustada para contar 8 meses corretamente
         function updateTimer() {
             const diff = new Date() - startDate;
             const d = Math.floor(diff / 86400000); const h = Math.floor((diff / 3600000) % 24);
