@@ -47,7 +47,6 @@
 
         .interaction-box { background: var(--glass); padding: 25px; border-radius: 20px; border: 1px solid var(--gold); margin: 20px 0; }
         
-        /* BOTÕES DE NAVEGAÇÃO COMO LINKS PARA IPHONE */
         .nav-link-container {
             position: fixed; bottom: 25px; left: 0; width: 100%;
             display: flex; justify-content: center; gap: 20px; z-index: 9999;
@@ -74,7 +73,7 @@
             <div class="container">
                 <div class="photo-frame"><img src="https://i.ibb.co/4n5csc1B/image.jpg"></div>
                 <h2>João & Maria</h2>
-                <p class="love-text">Sabe, minha princesa, eu sempre acreditei que algumas histórias já nascem escritas nas estrelas. Somos João e Maria, mas nossa história é muito melhor que a dos livros. No nosso mundo real, nem tudo são flores, mas é justamente a nossa união que nos faz superar qualquer desafio. Você é a minha vida, o encaixe exato de tudo o que eu sempre sonhei sem nem saber que existia. Nesses 8 meses, cada risada e cada plano confirmam que fomos feitos um para o outro. E mesmo que a gente não viva em um conto de fadas, o nosso amor real traz a única frase de ficção que eu faço questão de realizar com você: o nosso "felizes para sempre."</p>
+                <p class="love-text">Sabe, minha princesa, eu sempre acreditei que algumas histórias já nascem escritas nas estrelas. Somos João e Maria, mas nossa história é muito melhor que a dos livros. No nosso mundo real, nem tudo são flores, mas é justamente a nossa união que nos faz superar qualquer desafio. Você é a minha vida, o encaixe exato de tudo o que eu sempre sonhei sem nem saber que existia. Nesses 8 meses, cada risada e cada plano confirmam que fomos feitos um para o outro.</p>
             </div>
         </section>
 
@@ -82,7 +81,7 @@
             <div class="container">
                 <div class="photo-frame"><img src="https://i.ibb.co/3Y1Hd7DV/image.jpg"></div>
                 <div class="counter-grid" id="timer"></div>
-                <p class="love-text">Amar você não é sorte, é a melhor decisão que eu tomo todas as manhãs ao despertar. São 8 meses de cumplicidade, onde o tempo parece voar e parar ao mesmo tempo quando estou com você. Nosso amor ele não é daquele que com o tempo vai se acabando é ao contrário disso ele cresce, se fortalece e se renova a cada batida do meu coração por você.</p>
+                <p class="love-text">Amar você não é sorte, é a melhor decisão que eu tomo todas as manhãs ao despertar. São 8 meses de cumplicidade, onde o tempo parece voar e parar ao mesmo tempo quando estou com você.</p>
             </div>
         </section>
 
@@ -94,7 +93,7 @@
                     <input type="text" id="userInput" style="width:100%; background:none; border:none; border-bottom:2px solid var(--pink); color:white; text-align:center; padding:10px;" placeholder="Escreva aqui...">
                     <p id="responseMsg"></p>
                 </div>
-                <p class="love-text">A verdade é que eu gosto de absolutamente tudo em você. Gosto do seu jeito de me olhar, da paz que seu abraço me traz e de como você consegue ser linda até brava. Você é a obra-prima mais completa do meu universo, e não existe uma única parte sua que eu não admire.</p>
+                <p class="love-text">A verdade é que eu gosto de absolutamente TUDO em você. Gosto do seu jeito de me olhar, da paz que seu abraço me traz e de como você consegue ser linda até brava.</p>
             </div>
         </section>
 
@@ -104,7 +103,7 @@
                 <div class="interaction-box" style="border-radius: 50px;">
                     <a href="https://youtu.be/LyaEnoiIwPs?si=o65aKWNHzU_EEtSd" target="_blank" style="color: white; text-decoration: none; font-weight: bold;">🎵 TOQUE AQUI PARA OUVIR NOSSA MÚSICA ❤️</a>
                 </div>
-                <p class="love-text">"Pra falar do amor de dois, a gente tem que ser um só". duas metades que se encontraram e descobriram que a vida é muito melhor quando compartilhada. Amor, você é meu porto seguro.</p>
+                <p class="love-text">"Pra falar do amor de dois, a gente tem que ser um só". duas metades que se encontraram e descobriram que a vida é muito melhor quando compartilhada.</p>
             </div>
         </section>
 
@@ -201,7 +200,6 @@
             slider.style.transform = `translateX(-${currentSlide * (100 / 11)}%)`;
         }
 
-        // Timer Original
         const startDate = new Date('2025-06-15T00:00:00');
         function updateTimer() {
             const diff = new Date() - startDate;
@@ -211,7 +209,6 @@
         }
         setInterval(updateTimer, 1000); updateTimer();
 
-        // Álbum
         const imgInp = document.getElementById('imgUpload');
         const imgPre = document.getElementById('photoPreview');
         let selectedBase64 = "";
@@ -243,7 +240,6 @@
         }
         window.onload = renderAlbum;
 
-        // Outros
         let money = 0;
         function addMoney() { let v = parseFloat(document.getElementById('moneyInput').value); if(!isNaN(v)){ money+=v; document.getElementById('currentMoney').innerText=money; document.getElementById('bar').style.width=Math.min((money/5000)*100,100)+"%"; } }
         function addWish() { let v = document.getElementById('wishInput').value; if(v){ let d=document.createElement('div'); d.innerText="• "+v; document.getElementById('wishList').appendChild(d); } }
@@ -253,7 +249,6 @@
         const q2 = ["Onde foi o primeiro beijo?", "Nossa música?"];
         function nextMemory() { document.getElementById('memoryQuestion').innerText = q2[Math.floor(Math.random()*q2.length)]; }
 
-        // Estrelas
         const canvas = document.getElementById('skyCanvas'); const ctx = canvas.getContext('2d');
         canvas.width = window.innerWidth; canvas.height = window.innerHeight;
         const stars = Array.from({length: 100}, () => ({ x: Math.random()*canvas.width, y: Math.random()*canvas.height, size: Math.random()*1.5 }));
@@ -261,5 +256,4 @@
         draw();
     </script>
 </body>
-
 </html>
