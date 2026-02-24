@@ -146,7 +146,8 @@
             slider.style.transform = `translateX(-${currentSlide * 100}vw)`;
         }
 
-        const startDate = new Date('2024-06-15T00:00:00');
+        // Alterado de 2024 para 2025 para corrigir a contagem de 8 meses em 2026
+        const startDate = new Date('2025-06-15T00:00:00');
         function updateTimer() {
             const diff = new Date() - startDate;
             const d = Math.floor(diff / 86400000); const h = Math.floor((diff / 3600000) % 24);
