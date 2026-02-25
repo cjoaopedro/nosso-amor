@@ -16,7 +16,7 @@
         }
 
         .slider { 
-            display: flex; width: 1300vw; height: 100vh;
+            display: flex; width: 1200vw; height: 100vh;
             transition: transform 0.6s cubic-bezier(0.45, 0, 0.55, 1);
         }
 
@@ -64,27 +64,12 @@
         .btn-custom { background: var(--pink); border: none; color: white; padding: 12px 20px; border-radius: 50px; cursor: pointer; font-weight: bold; margin-top: 10px; width: 100%; }
         
         .list-item { background: rgba(255,255,255,0.1); padding: 10px; margin-top: 5px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; }
-        .done { text-decoration: line-through; opacity: 0.5; }
-        .check-btn { background: #4caf50; border: none; color: white; border-radius: 5px; padding: 5px 10px; cursor: pointer; }
         .music-card { background: var(--glass); border: 1px solid var(--pink); padding: 10px; border-radius: 10px; margin-top: 10px; }
         
         #photoPreview { width: 100%; max-height: 200px; object-fit: contain; margin-top: 15px; border-radius: 10px; display: none; border: 1px solid var(--gold); }
         .album-card { background: rgba(255,255,255,0.1); padding: 15px; border-radius: 15px; margin-top: 15px; border-left: 5px solid var(--pink); text-align: left; }
+        .album-card img { width: 100%; border-radius: 10px; margin-bottom: 10px; }
         canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 5; pointer-events: none; }
-        
-        /* Ajuste para o link no celular */
-        #manualCopyArea {
-            display: none;
-            margin-top: 15px;
-            width: 100%;
-            background: rgba(255,255,255,0.1);
-            border: 1px solid var(--gold);
-            padding: 10px;
-            border-radius: 10px;
-            color: white;
-            font-size: 0.8rem;
-            word-break: break-all;
-        }
     </style>
 </head>
 <body>
@@ -92,7 +77,7 @@
     <div class="slider" id="mainSlider">
         <section>
             <div class="container">
-                <div class="photo-frame"><img src="foto1.jpeg"></div>
+                <div class="photo-frame"><img src="foto1.jpeg" onerror="this.src='https://via.placeholder.com/200'"></div>
                 <h2>João & Maria</h2>
                 <p class="love-text">Sabe, minha princesa, eu sempre acreditei que algumas histórias já nascem escritas nas estrelas. Somos João e Maria, mas nossa história é muito melhor que a dos livros. No nosso mundo real, nem tudo são flores, mas é justamente a nossa união que nos faz superar qualquer desafio. Você é a minha vida, o encaixe exato de tudo o que eu sempre sonhei sem nem saber que existia. Nesses 8 meses, cada risada e cada plano confirmam que fomos feitos um para o outro. E mesmo que a gente não viva em um conto de fadas, o nosso amor real traz a única frase de ficção que eu faço questão de realizar com você: o nosso "felizes para sempre."</p>
             </div>
@@ -100,7 +85,7 @@
 
         <section>
             <div class="container">
-                <div class="photo-frame"><img src="foto2.jpeg"></div>
+                <div class="photo-frame"><img src="foto2.jpeg" onerror="this.src='https://via.placeholder.com/200'"></div>
                 <div class="counter-grid" id="timer"></div>
                 <p class="love-text">Amar você não é sorte, é a melhor decisão que eu tomo todas as manhãs ao despertar. São 8 meses de cumplicidade, onde o tempo parece voar e parar ao mesmo tempo quando estou com você. Nosso amor ele não é daquele que com o tempo vai se acabando é ao contrário disso ele cresce, se fortalece e se renova a cada batida do meu coração por você.</p>
             </div>
@@ -108,7 +93,7 @@
 
         <section>
             <div class="container">
-                <div class="photo-frame"><img src="foto3.jpeg"></div>
+                <div class="photo-frame"><img src="foto3.jpeg" onerror="this.src='https://via.placeholder.com/200'"></div>
                 <div class="interaction-box">
                     <h3 style="font-family: 'Dancing Script'; color: var(--pink); font-size: 2rem;">O que eu mais gosto em você?</h3>
                     <input type="text" id="userInput" oninput="checkLove()" style="width:100%; background:none; border:none; border-bottom:2px solid var(--pink); color:white; text-align:center; padding:10px;" placeholder="Escreva aqui...">
@@ -119,7 +104,7 @@
 
         <section>
             <div class="container">
-                <div class="photo-frame"><img src="foto4.jpeg"></div>
+                <div class="photo-frame"><img src="foto4.jpeg" onerror="this.src='https://via.placeholder.com/200'"></div>
                 <div class="interaction-box" style="border-radius: 50px;">
                     <a href="https://www.youtube.com/watch?v=eyhqJywl2wA" target="_blank" style="color: white; text-decoration: none; font-weight: bold;">🎵 TOQUE AQUI PARA OUVIR NOSSA MÚSICA ❤️</a>
                 </div>
@@ -142,8 +127,8 @@
             <div class="container">
                 <h3 style="font-family: 'Dancing Script'; color: var(--gold); font-size: 2.5rem;">Nosso Cofre</h3>
                 <div class="interaction-box">
-                    <div class="progress-bar" style="width:100%; height:15px; background:#333; border-radius:10px; overflow:hidden;"><div id="bar" style="height:100%; background:var(--gold); width:0%;"></div></div>
-                    <p>Total: R$ <span id="currentMoney">0</span> / R$ 5000</p>
+                    <div class="progress-bar" style="width:100%; height:15px; background:#333; border-radius:10px; overflow:hidden;"><div id="bar" style="height:100%; background:var(--gold); width:0%; transition: 0.5s;"></div></div>
+                    <p>Total: R$ <span id="currentMoney">0.00</span> / R$ 5000</p>
                     <input type="number" id="moneyInput" style="width:100%; background:none; border:none; border-bottom:2px solid var(--gold); color:white; text-align:center;" placeholder="Adicionar R$">
                     <button class="btn-custom" onclick="addMoney()">ADICIONAR</button>
                 </div>
@@ -209,21 +194,9 @@
         <section id="sky-page">
             <canvas id="skyCanvas"></canvas>
             <div class="container" style="z-index: 20;">
-                <div class="photo-frame" style="width: 180px; height: 180px;"><img src="foto5.jpeg"></div>
+                <div class="photo-frame" style="width: 180px; height: 180px;"><img src="foto5.jpeg" onerror="this.src='https://via.placeholder.com/200'"></div>
                 <h2 style="color: white; font-size: 2rem;">O Céu de 05/07/2025</h2>
                 <div style="font-family: 'Dancing Script'; font-size: 3rem; color: var(--gold);">Sempre Nós</div>
-            </div>
-        </section>
-
-        <section>
-            <div class="container">
-                <h3 style="font-family: 'Dancing Script'; color: var(--gold); font-size: 2.5rem;">Sincronizar Tudo</h3>
-                <div class="interaction-box">
-                    <p style="font-size: 0.9rem;">Clique no botão abaixo para gerar o link. Se não copiar automático, clique e segure no texto que aparecer!</p>
-                    <button class="btn-custom" onclick="generateShareLink()">GERAR LINK ATUALIZADO 🔗</button>
-                    <p id="shareStatus" style="font-size: 0.8rem; margin-top: 10px; color: #4caf50; display: none;">Link copiado!</p>
-                    <textarea id="manualCopyArea" readonly></textarea>
-                </div>
             </div>
         </section>
     </div>
@@ -233,145 +206,96 @@
         <a href="javascript:void(0)" class="nav-btn" onclick="move(1)">PRÓXIMO →</a>
     </div>
 
-    <script>
-        // CARREGAMENTO DOS DADOS DA URL
-        (function loadFromUrl() {
-            const params = new URLSearchParams(window.location.search);
-            const dataStr = params.get('data');
-            if (dataStr) {
-                try {
-                    const data = JSON.parse(decodeURIComponent(escape(atob(dataStr))));
-                    if(data.c !== undefined) localStorage.setItem('cofre_total', data.c);
-                    if(data.p) localStorage.setItem('planos_lista', data.p);
-                    if(data.d) localStorage.setItem('dialogo_lista', data.d);
-                    if(data.m) localStorage.setItem('playlist_amor', data.m);
-                    if(data.a) localStorage.setItem('album_maria', data.a);
-                    const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
-                    window.history.replaceState({path:newUrl}, '', newUrl);
-                } catch(e) { console.error("Erro dados URL"); }
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore, doc, onSnapshot, updateDoc, arrayUnion, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyC-iYyjNDCJl7bJSk_CLVFWrlDC8ZIEfzk",
+            authDomain: "sitedonossoamor.firebaseapp.com",
+            projectId: "sitedonossoamor",
+            storageBucket: "sitedonossoamor.firebasestorage.app",
+            messagingSenderId: "668011345419",
+            appId: "1:668011345419:web:f9297068f6adcb64fa390e"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const docRef = doc(db, "casal", "dados_v1");
+
+        // Inicializar documento se não existir
+        async function init() {
+            const snap = await getDoc(docRef);
+            if (!snap.exists()) {
+                await setDoc(docRef, { cofre: 0, planos: [], dialogos: [], musicas: [], album: [] });
             }
-        })();
-
-        let currentSlide = 0;
-        const totalSlides = 12;
-        const slider = document.getElementById('mainSlider');
-
-        function move(step) {
-            currentSlide = Math.max(0, Math.min(totalSlides, currentSlide + step));
-            slider.style.transform = `translateX(-${currentSlide * 100}vw)`;
         }
+        init();
 
-        // FUNÇÃO DE GERAR LINK COM "PLANO B" PARA CELULAR
-        function generateShareLink() {
-            const data = {
-                c: localStorage.getItem('cofre_total') || "0",
-                p: localStorage.getItem('planos_lista') || "[]",
-                d: localStorage.getItem('dialogo_lista') || "[]",
-                m: localStorage.getItem('playlist_amor') || "[]",
-                a: localStorage.getItem('album_maria') || "[]"
-            };
-            const encodedData = btoa(unescape(encodeURIComponent(JSON.stringify(data))));
-            const url = window.location.origin + window.location.pathname + "?data=" + encodedData;
-            
-            const areaManual = document.getElementById('manualCopyArea');
-            areaManual.value = url;
-            areaManual.style.display = 'block';
+        // ESCUTA EM TEMPO REAL
+        onSnapshot(docRef, (doc) => {
+            const data = doc.data();
+            if(!data) return;
 
-            // Tenta copiar automático
-            navigator.clipboard.writeText(url).then(() => {
-                document.getElementById('shareStatus').style.display = 'block';
-                setTimeout(() => { document.getElementById('shareStatus').style.display = 'none'; }, 3000);
-            }).catch(() => {
-                // Se falhar, foca na área manual para o usuário copiar
-                areaManual.select();
-                areaManual.setSelectionRange(0, 99999);
-                alert("O navegador bloqueou a cópia automática. Por favor, copie o link que apareceu na caixa abaixo.");
-            });
-        }
+            // Cofre
+            document.getElementById('currentMoney').innerText = parseFloat(data.cofre || 0).toFixed(2);
+            document.getElementById('bar').style.width = Math.min(((data.cofre || 0)/5000)*100, 100) + "%";
 
-        // --- RESTANTE DO CÓDIGO (CONTADOR E FUNÇÕES) ---
-        const startDate = new Date('2025-06-15T00:00:00');
-        function updateTimer() {
-            const diff = new Date() - startDate;
-            const d = Math.floor(diff / 86400000); 
-            const h = Math.floor((diff % 86400000) / 3600000);
-            const m = Math.floor((diff % 3600000) / 60000); 
-            const s = Math.floor((diff % 60000) / 1000);
-            document.getElementById('timer').innerHTML = `<div class="counter-item"><span>${d}</span><label>Dias</label></div><div class="counter-item"><span>${h}</span><label>Horas</label></div><div class="counter-item"><span>${m}</span><label>Min</label></div><div class="counter-item"><span>${s}</span><label>Seg</label></div>`;
-        }
-        setInterval(updateTimer, 1000); updateTimer();
+            // Playlist
+            document.getElementById('playlistContainer').innerHTML = (data.musicas || []).map(m => `
+                <div class="music-card"><strong>${m.name}</strong><br><a href="${m.link}" target="_blank" style="color:var(--pink); font-size:0.8rem;">Ouvir</a></div>
+            `).reverse().join('');
 
-        function checkLove() {
-            const val = document.getElementById('userInput').value.toLowerCase();
-            document.getElementById('loveResponse').style.display = val.length > 2 ? 'block' : 'none';
-        }
+            // Planos
+            document.getElementById('wishList').innerHTML = (data.planos || []).map(p => `
+                <div class="list-item"><span>• ${p}</span></div>
+            `).reverse().join('');
 
-        function updateCofreUI() {
-            const money = parseFloat(localStorage.getItem('cofre_total') || 0);
-            document.getElementById('currentMoney').innerText = money.toFixed(2);
-            document.getElementById('bar').style.width = Math.min((money/5000)*100, 100) + "%";
-        }
-        function addMoney() {
+            // Diálogos
+            document.getElementById('issueList').innerHTML = (data.dialogos || []).map(d => `
+                <div class="list-item"><span>• ${d}</span></div>
+            `).reverse().join('');
+
+            // Álbum
+            document.getElementById('albumContainer').innerHTML = (data.album || []).map(a => `
+                <div class="album-card"><img src="${a.img}"><p>${a.text}</p></div>
+            `).reverse().join('');
+        });
+
+        // AÇÕES DO USUÁRIO
+        window.addMoney = async () => {
             let v = parseFloat(document.getElementById('moneyInput').value);
-            if(!isNaN(v)){
-                let m = parseFloat(localStorage.getItem('cofre_total') || 0) + v;
-                localStorage.setItem('cofre_total', m);
-                updateCofreUI(); document.getElementById('moneyInput').value = "";
+            if(v) {
+                const snap = await getDoc(docRef);
+                await updateDoc(docRef, { cofre: (snap.data().cofre || 0) + v });
+                document.getElementById('moneyInput').value = "";
             }
-        }
+        };
 
-        function saveAndRenderWishes() {
-            let wishes = JSON.parse(localStorage.getItem('planos_lista') || '[]');
-            document.getElementById('wishList').innerHTML = wishes.map((w, i) => `
-                <div class="list-item ${w.done ? 'done' : ''}">
-                    <span>• ${w.text}</span>
-                    <button class="check-btn" onclick="toggleWish(${i})">${w.done ? 'Refazer' : 'Feito'}</button>
-                </div>
-            `).join('');
-        }
-        function addWish() {
+        window.addMusic = async () => {
+            let n = document.getElementById('musicName').value;
+            let l = document.getElementById('musicLink').value;
+            if(n && l) {
+                await updateDoc(docRef, { musicas: arrayUnion({ name: n, link: l }) });
+                document.getElementById('musicName').value = ""; document.getElementById('musicLink').value = "";
+            }
+        };
+
+        window.addWish = async () => {
             let t = document.getElementById('wishInput').value;
             if(t) {
-                let w = JSON.parse(localStorage.getItem('planos_lista') || '[]');
-                w.push({ text: t, done: false });
-                localStorage.setItem('planos_lista', JSON.stringify(w));
-                saveAndRenderWishes(); document.getElementById('wishInput').value = "";
+                await updateDoc(docRef, { planos: arrayUnion(t) });
+                document.getElementById('wishInput').value = "";
             }
-        }
-        function toggleWish(i) {
-            let w = JSON.parse(localStorage.getItem('planos_lista') || '[]');
-            w[i].done = !w[i].done;
-            localStorage.setItem('planos_lista', JSON.stringify(w));
-            saveAndRenderWishes();
-        }
+        };
 
-        function renderIssues() {
-            let iss = JSON.parse(localStorage.getItem('dialogo_lista') || '[]');
-            document.getElementById('issueList').innerHTML = iss.map(i => `<div class="list-item"><span>• ${i}</span></div>`).join('');
-        }
-        function addIssue() {
+        window.addIssue = async () => {
             let t = document.getElementById('issueInput').value;
             if(t) {
-                let i = JSON.parse(localStorage.getItem('dialogo_lista') || '[]');
-                i.push(t); localStorage.setItem('dialogo_lista', JSON.stringify(i));
-                renderIssues(); document.getElementById('issueInput').value = "";
+                await updateDoc(docRef, { dialogos: arrayUnion(t) });
+                document.getElementById('issueInput').value = "";
             }
-        }
-
-        function renderPlaylist() {
-            let p = JSON.parse(localStorage.getItem('playlist_amor') || '[]');
-            document.getElementById('playlistContainer').innerHTML = p.map(m => `
-                <div class="music-card"><strong>${m.name}</strong><br><a href="${m.link}" target="_blank" style="color:var(--pink); font-size:0.8rem;">Ouvir</a></div>
-            `).join('');
-        }
-        function addMusic() {
-            let n = document.getElementById('musicName').value, l = document.getElementById('musicLink').value;
-            if(n && l) {
-                let p = JSON.parse(localStorage.getItem('playlist_amor') || '[]');
-                p.push({ name: n, link: l }); localStorage.setItem('playlist_amor', JSON.stringify(p));
-                renderPlaylist(); document.getElementById('musicName').value = ""; document.getElementById('musicLink').value = "";
-            }
-        }
+        };
 
         const imgInp = document.getElementById('imgUpload'), imgPre = document.getElementById('photoPreview');
         let selectedBase64 = "";
@@ -381,27 +305,52 @@
             reader.onloadend = () => { selectedBase64 = reader.result; imgPre.src = selectedBase64; imgPre.style.display = 'block'; };
             if(file) reader.readAsDataURL(file);
         }
-        function savePhoto() {
+
+        window.savePhoto = async () => {
             const d = document.getElementById('photoDesc').value;
             if(d && selectedBase64) {
-                const a = JSON.parse(localStorage.getItem('album_maria') || '[]');
-                a.push({ img: selectedBase64, text: d });
-                localStorage.setItem('album_maria', JSON.stringify(a));
-                renderAlbum(); document.getElementById('photoDesc').value = ""; imgPre.style.display = 'none';
+                await updateDoc(docRef, { album: arrayUnion({ img: selectedBase64, text: d }) });
+                document.getElementById('photoDesc').value = ""; imgPre.style.display = 'none';
+                selectedBase64 = "";
+                alert("Foto salva para sempre! ❤️");
             }
-        }
-        function renderAlbum() {
-            const a = JSON.parse(localStorage.getItem('album_maria') || '[]');
-            document.getElementById('albumContainer').innerHTML = a.map(m => `<div class="album-card"><img src="${m.img}" style="width:100%; border-radius:10px;"><p>${m.text}</p></div>`).reverse().join('');
-        }
+        };
 
-        window.onload = () => { updateCofreUI(); saveAndRenderWishes(); renderIssues(); renderPlaylist(); renderAlbum(); };
+        // NAVEGAÇÃO
+        let currentSlide = 0;
+        window.move = (step) => {
+            currentSlide = Math.max(0, Math.min(11, currentSlide + step));
+            document.getElementById('mainSlider').style.transform = `translateX(-${currentSlide * 100}vw)`;
+        };
 
+        window.checkLove = () => {
+            const val = document.getElementById('userInput').value.toLowerCase();
+            document.getElementById('loveResponse').style.display = val.length > 2 ? 'block' : 'none';
+        };
+
+        // CONTADOR
+        const startDate = new Date('2025-06-15T00:00:00');
+        function updateTimer() {
+            const diff = new Date() - startDate;
+            const d = Math.floor(diff / 86400000); 
+            const h = Math.floor((diff % 86400000) / 3600000);
+            const m = Math.floor((diff % 3600000) / 60000); 
+            const s = Math.floor((diff % 60000) / 1000);
+            document.getElementById('timer').innerHTML = `
+                <div class="counter-item"><span>${d}</span><label>Dias</label></div>
+                <div class="counter-item"><span>${h}</span><label>Horas</label></div>
+                <div class="counter-item"><span>${m}</span><label>Min</label></div>
+                <div class="counter-item"><span>${s}</span><label>Seg</label></div>`;
+        }
+        setInterval(updateTimer, 1000); updateTimer();
+
+        // JOGOS
         const q1 = ["Quem é mais provável de chorar?", "Quem é mais teimoso?", "Quem esquece as chaves?"];
-        function nextQuestion() { document.getElementById('gameQuestion').innerText = q1[Math.floor(Math.random()*q1.length)]; }
+        window.nextQuestion = () => { document.getElementById('gameQuestion').innerText = q1[Math.floor(Math.random()*q1.length)]; }
         const q2 = ["Onde foi o primeiro beijo?", "Nossa música?", "Nossa data?"];
-        function nextMemory() { document.getElementById('memoryQuestion').innerText = q2[Math.floor(Math.random()*q2.length)]; }
+        window.nextMemory = () => { document.getElementById('memoryQuestion').innerText = q2[Math.floor(Math.random()*q2.length)]; }
 
+        // ESTRELAS
         const canvas = document.getElementById('skyCanvas'), ctx = canvas.getContext('2d');
         canvas.width = window.innerWidth; canvas.height = window.innerHeight;
         const stars = Array.from({length: 100}, () => ({ x: Math.random()*canvas.width, y: Math.random()*canvas.height, size: Math.random()*1.5 }));
