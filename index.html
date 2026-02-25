@@ -71,6 +71,20 @@
         #photoPreview { width: 100%; max-height: 200px; object-fit: contain; margin-top: 15px; border-radius: 10px; display: none; border: 1px solid var(--gold); }
         .album-card { background: rgba(255,255,255,0.1); padding: 15px; border-radius: 15px; margin-top: 15px; border-left: 5px solid var(--pink); text-align: left; }
         canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 5; pointer-events: none; }
+        
+        /* Ajuste para o link no celular */
+        #manualCopyArea {
+            display: none;
+            margin-top: 15px;
+            width: 100%;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid var(--gold);
+            padding: 10px;
+            border-radius: 10px;
+            color: white;
+            font-size: 0.8rem;
+            word-break: break-all;
+        }
     </style>
 </head>
 <body>
@@ -205,9 +219,10 @@
             <div class="container">
                 <h3 style="font-family: 'Dancing Script'; color: var(--gold); font-size: 2.5rem;">Sincronizar Tudo</h3>
                 <div class="interaction-box">
-                    <p style="font-size: 0.9rem;">Clique abaixo para gerar o link e envie para ela!</p>
+                    <p style="font-size: 0.9rem;">Clique no botão abaixo para gerar o link. Se não copiar automático, clique e segure no texto que aparecer!</p>
                     <button class="btn-custom" onclick="generateShareLink()">GERAR LINK ATUALIZADO 🔗</button>
-                    <p id="shareStatus" style="font-size: 0.8rem; margin-top: 10px; color: #4caf50; display: none;">Link copiado! Envie pelo WhatsApp.</p>
+                    <p id="shareStatus" style="font-size: 0.8rem; margin-top: 10px; color: #4caf50; display: none;">Link copiado!</p>
+                    <textarea id="manualCopyArea" readonly></textarea>
                 </div>
             </div>
         </section>
@@ -219,8 +234,8 @@
     </div>
 
     <script>
-        // --- 1. CARREGAMENTO IMEDIATO DOS DADOS (ANTES DE TUDO) ---
-        function loadFromUrl() {
+        // CARREGAMENTO DOS DADOS DA URL
+        (function loadFromUrl() {
             const params = new URLSearchParams(window.location.search);
             const dataStr = params.get('data');
             if (dataStr) {
@@ -231,14 +246,11 @@
                     if(data.d) localStorage.setItem('dialogo_lista', data.d);
                     if(data.m) localStorage.setItem('playlist_amor', data.m);
                     if(data.a) localStorage.setItem('album_maria', data.a);
-                    
-                    // Limpa a URL sem recarregar a página
                     const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
                     window.history.replaceState({path:newUrl}, '', newUrl);
-                } catch(e) { console.error("Erro ao ler dados"); }
+                } catch(e) { console.error("Erro dados URL"); }
             }
-        }
-        loadFromUrl(); // Executa antes de carregar o restante do script
+        })();
 
         let currentSlide = 0;
         const totalSlides = 12;
@@ -249,6 +261,7 @@
             slider.style.transform = `translateX(-${currentSlide * 100}vw)`;
         }
 
+        // FUNÇÃO DE GERAR LINK COM "PLANO B" PARA CELULAR
         function generateShareLink() {
             const data = {
                 c: localStorage.getItem('cofre_total') || "0",
@@ -260,16 +273,23 @@
             const encodedData = btoa(unescape(encodeURIComponent(JSON.stringify(data))));
             const url = window.location.origin + window.location.pathname + "?data=" + encodedData;
             
+            const areaManual = document.getElementById('manualCopyArea');
+            areaManual.value = url;
+            areaManual.style.display = 'block';
+
+            // Tenta copiar automático
             navigator.clipboard.writeText(url).then(() => {
-                const status = document.getElementById('shareStatus');
-                status.style.display = 'block';
-                setTimeout(() => status.style.display = 'none', 5000);
-            }).catch(err => {
-                alert("Copie este link manualmente: " + url);
+                document.getElementById('shareStatus').style.display = 'block';
+                setTimeout(() => { document.getElementById('shareStatus').style.display = 'none'; }, 3000);
+            }).catch(() => {
+                // Se falhar, foca na área manual para o usuário copiar
+                areaManual.select();
+                areaManual.setSelectionRange(0, 99999);
+                alert("O navegador bloqueou a cópia automática. Por favor, copie o link que apareceu na caixa abaixo.");
             });
         }
 
-        // --- CONTADOR ---
+        // --- RESTANTE DO CÓDIGO (CONTADOR E FUNÇÕES) ---
         const startDate = new Date('2025-06-15T00:00:00');
         function updateTimer() {
             const diff = new Date() - startDate;
@@ -281,11 +301,9 @@
         }
         setInterval(updateTimer, 1000); updateTimer();
 
-        // --- INTERAÇÕES ---
         function checkLove() {
             const val = document.getElementById('userInput').value.toLowerCase();
-            if(val.length > 2) document.getElementById('loveResponse').style.display = 'block';
-            else document.getElementById('loveResponse').style.display = 'none';
+            document.getElementById('loveResponse').style.display = val.length > 2 ? 'block' : 'none';
         }
 
         function updateCofreUI() {
@@ -296,11 +314,9 @@
         function addMoney() {
             let v = parseFloat(document.getElementById('moneyInput').value);
             if(!isNaN(v)){
-                let money = parseFloat(localStorage.getItem('cofre_total') || 0);
-                money += v;
-                localStorage.setItem('cofre_total', money);
-                updateCofreUI();
-                document.getElementById('moneyInput').value = "";
+                let m = parseFloat(localStorage.getItem('cofre_total') || 0) + v;
+                localStorage.setItem('cofre_total', m);
+                updateCofreUI(); document.getElementById('moneyInput').value = "";
             }
         }
 
@@ -314,62 +330,50 @@
             `).join('');
         }
         function addWish() {
-            let text = document.getElementById('wishInput').value;
-            if(text) {
-                let wishes = JSON.parse(localStorage.getItem('planos_lista') || '[]');
-                wishes.push({ text: text, done: false });
-                localStorage.setItem('planos_lista', JSON.stringify(wishes));
-                saveAndRenderWishes();
-                document.getElementById('wishInput').value = "";
+            let t = document.getElementById('wishInput').value;
+            if(t) {
+                let w = JSON.parse(localStorage.getItem('planos_lista') || '[]');
+                w.push({ text: t, done: false });
+                localStorage.setItem('planos_lista', JSON.stringify(w));
+                saveAndRenderWishes(); document.getElementById('wishInput').value = "";
             }
         }
-        function toggleWish(index) {
-            let wishes = JSON.parse(localStorage.getItem('planos_lista') || '[]');
-            wishes[index].done = !wishes[index].done;
-            localStorage.setItem('planos_lista', JSON.stringify(wishes));
+        function toggleWish(i) {
+            let w = JSON.parse(localStorage.getItem('planos_lista') || '[]');
+            w[i].done = !w[i].done;
+            localStorage.setItem('planos_lista', JSON.stringify(w));
             saveAndRenderWishes();
         }
 
         function renderIssues() {
-            let issues = JSON.parse(localStorage.getItem('dialogo_lista') || '[]');
-            document.getElementById('issueList').innerHTML = issues.map(i => `<div class="list-item"><span>• ${i}</span></div>`).join('');
+            let iss = JSON.parse(localStorage.getItem('dialogo_lista') || '[]');
+            document.getElementById('issueList').innerHTML = iss.map(i => `<div class="list-item"><span>• ${i}</span></div>`).join('');
         }
         function addIssue() {
-            let text = document.getElementById('issueInput').value;
-            if(text) {
-                let issues = JSON.parse(localStorage.getItem('dialogo_lista') || '[]');
-                issues.push(text);
-                localStorage.setItem('dialogo_lista', JSON.stringify(issues));
-                renderIssues();
-                document.getElementById('issueInput').value = "";
+            let t = document.getElementById('issueInput').value;
+            if(t) {
+                let i = JSON.parse(localStorage.getItem('dialogo_lista') || '[]');
+                i.push(t); localStorage.setItem('dialogo_lista', JSON.stringify(i));
+                renderIssues(); document.getElementById('issueInput').value = "";
             }
         }
 
         function renderPlaylist() {
-            let playlist = JSON.parse(localStorage.getItem('playlist_amor') || '[]');
-            document.getElementById('playlistContainer').innerHTML = playlist.map(m => `
-                <div class="music-card">
-                    <strong>${m.name}</strong><br>
-                    <a href="${m.link}" target="_blank" style="color:var(--pink); font-size:0.8rem;">Clique para ouvir</a>
-                </div>
+            let p = JSON.parse(localStorage.getItem('playlist_amor') || '[]');
+            document.getElementById('playlistContainer').innerHTML = p.map(m => `
+                <div class="music-card"><strong>${m.name}</strong><br><a href="${m.link}" target="_blank" style="color:var(--pink); font-size:0.8rem;">Ouvir</a></div>
             `).join('');
         }
         function addMusic() {
-            let name = document.getElementById('musicName').value;
-            let link = document.getElementById('musicLink').value;
-            if(name && link) {
-                let playlist = JSON.parse(localStorage.getItem('playlist_amor') || '[]');
-                playlist.push({ name: name, link: link });
-                localStorage.setItem('playlist_amor', JSON.stringify(playlist));
-                renderPlaylist();
-                document.getElementById('musicName').value = "";
-                document.getElementById('musicLink').value = "";
+            let n = document.getElementById('musicName').value, l = document.getElementById('musicLink').value;
+            if(n && l) {
+                let p = JSON.parse(localStorage.getItem('playlist_amor') || '[]');
+                p.push({ name: n, link: l }); localStorage.setItem('playlist_amor', JSON.stringify(p));
+                renderPlaylist(); document.getElementById('musicName').value = ""; document.getElementById('musicLink').value = "";
             }
         }
 
-        // --- ÁLBUM ---
-        const imgInp = document.getElementById('imgUpload');
-        const imgPre = document.getElementById('photoPreview');
+        const imgInp = document.getElementById('imgUpload'), imgPre = document.getElementById('photoPreview');
         let selectedBase64 = "";
         imgInp.onchange = e => {
             const file = e.target.files[0];
@@ -378,34 +382,27 @@
             if(file) reader.readAsDataURL(file);
         }
         function savePhoto() {
-            const desc = document.getElementById('photoDesc').value;
-            if(desc && selectedBase64) {
-                const album = JSON.parse(localStorage.getItem('album_maria') || '[]');
-                album.push({ img: selectedBase64, text: desc });
-                localStorage.setItem('album_maria', JSON.stringify(album));
-                renderAlbum();
-                document.getElementById('photoDesc').value = ""; imgPre.style.display = 'none'; selectedBase64 = "";
+            const d = document.getElementById('photoDesc').value;
+            if(d && selectedBase64) {
+                const a = JSON.parse(localStorage.getItem('album_maria') || '[]');
+                a.push({ img: selectedBase64, text: d });
+                localStorage.setItem('album_maria', JSON.stringify(a));
+                renderAlbum(); document.getElementById('photoDesc').value = ""; imgPre.style.display = 'none';
             }
         }
         function renderAlbum() {
-            const album = JSON.parse(localStorage.getItem('album_maria') || '[]');
-            document.getElementById('albumContainer').innerHTML = album.map(m => `<div class="album-card"><img src="${m.img}" style="width:100%; border-radius:10px;"><p>${m.text}</p></div>`).reverse().join('');
+            const a = JSON.parse(localStorage.getItem('album_maria') || '[]');
+            document.getElementById('albumContainer').innerHTML = a.map(m => `<div class="album-card"><img src="${m.img}" style="width:100%; border-radius:10px;"><p>${m.text}</p></div>`).reverse().join('');
         }
 
-        window.onload = () => {
-            updateCofreUI();
-            saveAndRenderWishes();
-            renderIssues();
-            renderPlaylist();
-            renderAlbum();
-        };
+        window.onload = () => { updateCofreUI(); saveAndRenderWishes(); renderIssues(); renderPlaylist(); renderAlbum(); };
 
-        const q1 = ["Quem é mais provável de chorar?", "Quem é mais teimoso?", "Quem esquece as chaves?", "Quem é mais ciumento?"];
+        const q1 = ["Quem é mais provável de chorar?", "Quem é mais teimoso?", "Quem esquece as chaves?"];
         function nextQuestion() { document.getElementById('gameQuestion').innerText = q1[Math.floor(Math.random()*q1.length)]; }
         const q2 = ["Onde foi o primeiro beijo?", "Nossa música?", "Nossa data?"];
         function nextMemory() { document.getElementById('memoryQuestion').innerText = q2[Math.floor(Math.random()*q2.length)]; }
 
-        const canvas = document.getElementById('skyCanvas'); const ctx = canvas.getContext('2d');
+        const canvas = document.getElementById('skyCanvas'), ctx = canvas.getContext('2d');
         canvas.width = window.innerWidth; canvas.height = window.innerHeight;
         const stars = Array.from({length: 100}, () => ({ x: Math.random()*canvas.width, y: Math.random()*canvas.height, size: Math.random()*1.5 }));
         function draw() { ctx.clearRect(0,0,canvas.width,canvas.height); ctx.fillStyle="white"; stars.forEach(s => { ctx.beginPath(); ctx.arc(s.x,s.y,s.size,0,Math.PI*2); ctx.fill(); }); requestAnimationFrame(draw); }
