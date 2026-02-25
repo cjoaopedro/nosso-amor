@@ -62,7 +62,6 @@
 
         .btn-custom { background: var(--pink); border: none; color: white; padding: 12px 20px; border-radius: 50px; cursor: pointer; font-weight: bold; margin-top: 10px; width: 100%; }
         
-        /* Listas e Botões de Ação */
         .list-item { background: rgba(255,255,255,0.1); padding: 12px; margin-top: 8px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; border-left: 4px solid var(--pink); }
         .list-actions { display: flex; gap: 8px; }
         .action-btn { background: none; border: 1px solid rgba(255,255,255,0.3); color: white; border-radius: 8px; padding: 5px 8px; cursor: pointer; font-size: 0.8rem; }
@@ -242,11 +241,9 @@
             const data = doc.data();
             if(!data) return;
 
-            // Cofre
             document.getElementById('currentMoney').innerText = parseFloat(data.cofre || 0).toFixed(2);
             document.getElementById('bar').style.width = Math.min(((data.cofre || 0)/5000)*100, 100) + "%";
 
-            // Playlist
             document.getElementById('playlistContainer').innerHTML = (data.musicas || []).map((m, i) => `
                 <div class="music-card">
                     <div><strong>${m.name}</strong><br><a href="${m.link}" target="_blank" style="color:var(--pink); font-size:0.8rem;">Ouvir</a></div>
@@ -254,7 +251,6 @@
                 </div>
             `).reverse().join('');
 
-            // Planos (Com Botão de Feito e Excluir)
             document.getElementById('wishList').innerHTML = (data.planos || []).map((p, i) => `
                 <div class="list-item">
                     <span class="${p.feito ? 'done-text' : ''}">• ${p.texto}</span>
@@ -265,7 +261,6 @@
                 </div>
             `).reverse().join('');
 
-            // Diálogos (Com Botão Excluir)
             document.getElementById('issueList').innerHTML = (data.dialogos || []).map((d, i) => `
                 <div class="list-item">
                     <span>• ${d}</span>
@@ -273,7 +268,6 @@
                 </div>
             `).reverse().join('');
 
-            // Álbum (Com Botão Excluir)
             document.getElementById('albumContainer').innerHTML = (data.album || []).map((a, i) => `
                 <div class="album-card">
                     <img src="${a.img}">
@@ -283,12 +277,11 @@
             `).reverse().join('');
         });
 
-        // AÇÕES GENÉRICAS
         window.removeItem = async (campo, index) => {
             if(confirm("Tem certeza que deseja apagar?")) {
                 const snap = await getDoc(docRef);
                 let lista = snap.data()[campo];
-                lista.splice(lista.length - 1 - index, 1); // Ajuste por causa do .reverse()
+                lista.splice(lista.length - 1 - index, 1);
                 await updateDoc(docRef, { [campo]: lista });
             }
         };
@@ -307,7 +300,6 @@
             }
         };
 
-        // ADIÇÕES
         window.addMoney = async () => {
             let v = parseFloat(document.getElementById('moneyInput').value);
             if(v) {
@@ -342,25 +334,52 @@
             }
         };
 
+        // --- PARTE DA FOTO COM COMPRESSÃO ---
         const imgInp = document.getElementById('imgUpload'), imgPre = document.getElementById('photoPreview');
         let selectedBase64 = "";
+
         imgInp.onchange = e => {
             const file = e.target.files[0];
             const reader = new FileReader();
-            reader.onloadend = () => { selectedBase64 = reader.result; imgPre.src = selectedBase64; imgPre.style.display = 'block'; };
+            reader.onload = (event) => {
+                const img = new Image();
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    let width = 600; // Redimensiona para largura máxima de 600px
+                    let scaleFactor = width / img.width;
+                    canvas.width = width;
+                    canvas.height = img.height * scaleFactor;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                    
+                    // Comprime a qualidade para 0.7 (70%) para ser leve
+                    selectedBase64 = canvas.toDataURL('image/jpeg', 0.7);
+                    imgPre.src = selectedBase64;
+                    imgPre.style.display = 'block';
+                };
+                img.src = event.target.result;
+            };
             if(file) reader.readAsDataURL(file);
         }
 
         window.savePhoto = async () => {
             const d = document.getElementById('photoDesc').value;
             if(d && selectedBase64) {
-                await updateDoc(docRef, { album: arrayUnion({ img: selectedBase64, text: d }) });
-                document.getElementById('photoDesc').value = ""; imgPre.style.display = 'none';
-                selectedBase64 = "";
+                try {
+                    await updateDoc(docRef, { album: arrayUnion({ img: selectedBase64, text: d }) });
+                    document.getElementById('photoDesc').value = ""; 
+                    imgPre.style.display = 'none';
+                    selectedBase64 = "";
+                    alert("Foto salva com sucesso!");
+                } catch (e) {
+                    alert("Erro ao salvar! O banco pode estar cheio.");
+                }
+            } else {
+                alert("Escolha uma foto e escreva uma descrição!");
             }
         };
+        // ------------------------------------
 
-        // NAVEGAÇÃO E OUTROS
         let currentSlide = 0;
         window.move = (step) => {
             currentSlide = Math.max(0, Math.min(11, currentSlide + step));
