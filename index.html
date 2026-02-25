@@ -38,14 +38,13 @@
         .photo-frame img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
 
         h2 { font-family: 'Dancing Script', cursive; font-size: 3rem; color: var(--pink); margin: 10px 0; }
-
         .love-text { font-size: 1.1rem; line-height: 1.6; color: #ffffff; text-align: center; margin: 20px 0; background: rgba(0,0,0,0.3); padding: 15px; border-radius: 15px; }
 
         .counter-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 20px 0; }
         .counter-item { background: var(--glass); padding: 15px 5px; border-radius: 10px; border: 1px solid var(--gold); }
         .counter-item span { display: block; font-size: 1.3rem; color: var(--gold); font-weight: bold; }
 
-        .interaction-box { background: var(--glass); padding: 25px; border-radius: 20px; border: 1px solid var(--gold); margin: 20px 0; }
+        .interaction-box { background: var(--glass); padding: 25px; border-radius: 20px; border: 1px solid var(--gold); margin: 20px 0; position: relative; }
         
         .nav-link-container {
             position: fixed; bottom: 25px; left: 0; width: 100%;
@@ -63,11 +62,18 @@
 
         .btn-custom { background: var(--pink); border: none; color: white; padding: 12px 20px; border-radius: 50px; cursor: pointer; font-weight: bold; margin-top: 10px; width: 100%; }
         
-        .list-item { background: rgba(255,255,255,0.1); padding: 10px; margin-top: 5px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; }
-        .music-card { background: var(--glass); border: 1px solid var(--pink); padding: 10px; border-radius: 10px; margin-top: 10px; }
+        /* Listas e Botões de Ação */
+        .list-item { background: rgba(255,255,255,0.1); padding: 12px; margin-top: 8px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; border-left: 4px solid var(--pink); }
+        .list-actions { display: flex; gap: 8px; }
+        .action-btn { background: none; border: 1px solid rgba(255,255,255,0.3); color: white; border-radius: 8px; padding: 5px 8px; cursor: pointer; font-size: 0.8rem; }
+        .btn-delete { border-color: #ff4d4d; color: #ff4d4d; }
+        .btn-check { border-color: #4caf50; color: #4caf50; }
+        .done-text { text-decoration: line-through; opacity: 0.5; color: #4caf50; }
+
+        .music-card { background: var(--glass); border: 1px solid var(--pink); padding: 10px; border-radius: 10px; margin-top: 10px; display: flex; justify-content: space-between; align-items: center; }
         
         #photoPreview { width: 100%; max-height: 200px; object-fit: contain; margin-top: 15px; border-radius: 10px; display: none; border: 1px solid var(--gold); }
-        .album-card { background: rgba(255,255,255,0.1); padding: 15px; border-radius: 15px; margin-top: 15px; border-left: 5px solid var(--pink); text-align: left; }
+        .album-card { background: rgba(255,255,255,0.1); padding: 15px; border-radius: 15px; margin-top: 15px; border-left: 5px solid var(--pink); text-align: left; position: relative;}
         .album-card img { width: 100%; border-radius: 10px; margin-bottom: 10px; }
         canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 5; pointer-events: none; }
     </style>
@@ -131,6 +137,7 @@
                     <p>Total: R$ <span id="currentMoney">0.00</span> / R$ 5000</p>
                     <input type="number" id="moneyInput" style="width:100%; background:none; border:none; border-bottom:2px solid var(--gold); color:white; text-align:center;" placeholder="Adicionar R$">
                     <button class="btn-custom" onclick="addMoney()">ADICIONAR</button>
+                    <button class="btn-custom" style="background:none; border: 1px solid #ff4d4d; color:#ff4d4d; font-size: 0.7rem; margin-top: 20px; width: auto; padding: 5px 10px;" onclick="resetCofre()">RESTAR COFRE</button>
                 </div>
             </div>
         </section>
@@ -223,7 +230,6 @@
         const db = getFirestore(app);
         const docRef = doc(db, "casal", "dados_v1");
 
-        // Inicializar documento se não existir
         async function init() {
             const snap = await getDoc(docRef);
             if (!snap.exists()) {
@@ -232,7 +238,6 @@
         }
         init();
 
-        // ESCUTA EM TEMPO REAL
         onSnapshot(docRef, (doc) => {
             const data = doc.data();
             if(!data) return;
@@ -242,27 +247,67 @@
             document.getElementById('bar').style.width = Math.min(((data.cofre || 0)/5000)*100, 100) + "%";
 
             // Playlist
-            document.getElementById('playlistContainer').innerHTML = (data.musicas || []).map(m => `
-                <div class="music-card"><strong>${m.name}</strong><br><a href="${m.link}" target="_blank" style="color:var(--pink); font-size:0.8rem;">Ouvir</a></div>
+            document.getElementById('playlistContainer').innerHTML = (data.musicas || []).map((m, i) => `
+                <div class="music-card">
+                    <div><strong>${m.name}</strong><br><a href="${m.link}" target="_blank" style="color:var(--pink); font-size:0.8rem;">Ouvir</a></div>
+                    <button class="action-btn btn-delete" onclick="removeItem('musicas', ${i})">X</button>
+                </div>
             `).reverse().join('');
 
-            // Planos
-            document.getElementById('wishList').innerHTML = (data.planos || []).map(p => `
-                <div class="list-item"><span>• ${p}</span></div>
+            // Planos (Com Botão de Feito e Excluir)
+            document.getElementById('wishList').innerHTML = (data.planos || []).map((p, i) => `
+                <div class="list-item">
+                    <span class="${p.feito ? 'done-text' : ''}">• ${p.texto}</span>
+                    <div class="list-actions">
+                        <button class="action-btn btn-check" onclick="togglePlano(${i})">✓</button>
+                        <button class="action-btn btn-delete" onclick="removeItem('planos', ${i})">X</button>
+                    </div>
+                </div>
             `).reverse().join('');
 
-            // Diálogos
-            document.getElementById('issueList').innerHTML = (data.dialogos || []).map(d => `
-                <div class="list-item"><span>• ${d}</span></div>
+            // Diálogos (Com Botão Excluir)
+            document.getElementById('issueList').innerHTML = (data.dialogos || []).map((d, i) => `
+                <div class="list-item">
+                    <span>• ${d}</span>
+                    <button class="action-btn btn-delete" onclick="removeItem('dialogos', ${i})">X</button>
+                </div>
             `).reverse().join('');
 
-            // Álbum
-            document.getElementById('albumContainer').innerHTML = (data.album || []).map(a => `
-                <div class="album-card"><img src="${a.img}"><p>${a.text}</p></div>
+            // Álbum (Com Botão Excluir)
+            document.getElementById('albumContainer').innerHTML = (data.album || []).map((a, i) => `
+                <div class="album-card">
+                    <img src="${a.img}">
+                    <p>${a.text}</p>
+                    <button class="action-btn btn-delete" style="position:absolute; top:10px; right:10px; background:rgba(0,0,0,0.5);" onclick="removeItem('album', ${i})">Excluir</button>
+                </div>
             `).reverse().join('');
         });
 
-        // AÇÕES DO USUÁRIO
+        // AÇÕES GENÉRICAS
+        window.removeItem = async (campo, index) => {
+            if(confirm("Tem certeza que deseja apagar?")) {
+                const snap = await getDoc(docRef);
+                let lista = snap.data()[campo];
+                lista.splice(lista.length - 1 - index, 1); // Ajuste por causa do .reverse()
+                await updateDoc(docRef, { [campo]: lista });
+            }
+        };
+
+        window.togglePlano = async (index) => {
+            const snap = await getDoc(docRef);
+            let lista = snap.data().planos;
+            let realIndex = lista.length - 1 - index;
+            lista[realIndex].feito = !lista[realIndex].feito;
+            await updateDoc(docRef, { planos: lista });
+        };
+
+        window.resetCofre = async () => {
+            if(confirm("Deseja zerar o cofre?")) {
+                await updateDoc(docRef, { cofre: 0 });
+            }
+        };
+
+        // ADIÇÕES
         window.addMoney = async () => {
             let v = parseFloat(document.getElementById('moneyInput').value);
             if(v) {
@@ -272,19 +317,10 @@
             }
         };
 
-        window.addMusic = async () => {
-            let n = document.getElementById('musicName').value;
-            let l = document.getElementById('musicLink').value;
-            if(n && l) {
-                await updateDoc(docRef, { musicas: arrayUnion({ name: n, link: l }) });
-                document.getElementById('musicName').value = ""; document.getElementById('musicLink').value = "";
-            }
-        };
-
         window.addWish = async () => {
             let t = document.getElementById('wishInput').value;
             if(t) {
-                await updateDoc(docRef, { planos: arrayUnion(t) });
+                await updateDoc(docRef, { planos: arrayUnion({ texto: t, feito: false }) });
                 document.getElementById('wishInput').value = "";
             }
         };
@@ -294,6 +330,15 @@
             if(t) {
                 await updateDoc(docRef, { dialogos: arrayUnion(t) });
                 document.getElementById('issueInput').value = "";
+            }
+        };
+
+        window.addMusic = async () => {
+            let n = document.getElementById('musicName').value;
+            let l = document.getElementById('musicLink').value;
+            if(n && l) {
+                await updateDoc(docRef, { musicas: arrayUnion({ name: n, link: l }) });
+                document.getElementById('musicName').value = ""; document.getElementById('musicLink').value = "";
             }
         };
 
@@ -312,11 +357,10 @@
                 await updateDoc(docRef, { album: arrayUnion({ img: selectedBase64, text: d }) });
                 document.getElementById('photoDesc').value = ""; imgPre.style.display = 'none';
                 selectedBase64 = "";
-                alert("Foto salva para sempre! ❤️");
             }
         };
 
-        // NAVEGAÇÃO
+        // NAVEGAÇÃO E OUTROS
         let currentSlide = 0;
         window.move = (step) => {
             currentSlide = Math.max(0, Math.min(11, currentSlide + step));
@@ -328,7 +372,6 @@
             document.getElementById('loveResponse').style.display = val.length > 2 ? 'block' : 'none';
         };
 
-        // CONTADOR
         const startDate = new Date('2025-06-15T00:00:00');
         function updateTimer() {
             const diff = new Date() - startDate;
@@ -344,13 +387,11 @@
         }
         setInterval(updateTimer, 1000); updateTimer();
 
-        // JOGOS
-        const q1 = ["Quem é mais provável de chorar?", "Quem é mais teimoso?", "Quem esquece as chaves?"];
+        const q1 = ["Quem é mais provável de chorar?", "Quem é mais teimoso?", "Quem esquece as chaves?", "Quem manda a primeira mensagem depois de uma briga?", "Quem é mais ciumento?", "Quem cozinha melhor?"];
         window.nextQuestion = () => { document.getElementById('gameQuestion').innerText = q1[Math.floor(Math.random()*q1.length)]; }
-        const q2 = ["Onde foi o primeiro beijo?", "Nossa música?", "Nossa data?"];
+        const q2 = ["Onde foi o primeiro beijo?", "Nossa música?", "Nossa data?", "Qual foi a primeira coisa que João disse para Maria?", "Qual a cor favorita dela?", "Quem disse eu te amo primeiro?"];
         window.nextMemory = () => { document.getElementById('memoryQuestion').innerText = q2[Math.floor(Math.random()*q2.length)]; }
 
-        // ESTRELAS
         const canvas = document.getElementById('skyCanvas'), ctx = canvas.getContext('2d');
         canvas.width = window.innerWidth; canvas.height = window.innerHeight;
         const stars = Array.from({length: 100}, () => ({ x: Math.random()*canvas.width, y: Math.random()*canvas.height, size: Math.random()*1.5 }));
