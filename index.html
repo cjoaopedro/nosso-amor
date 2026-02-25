@@ -205,9 +205,9 @@
             <div class="container">
                 <h3 style="font-family: 'Dancing Script'; color: var(--gold); font-size: 2.5rem;">Sincronizar Tudo</h3>
                 <div class="interaction-box">
-                    <p style="font-size: 0.9rem;">Clique no botão abaixo para gerar um link com todas as suas atualizações e envie para ela!</p>
+                    <p style="font-size: 0.9rem;">Clique abaixo para gerar o link e envie para ela!</p>
                     <button class="btn-custom" onclick="generateShareLink()">GERAR LINK ATUALIZADO 🔗</button>
-                    <p id="shareStatus" style="font-size: 0.8rem; margin-top: 10px; color: #4caf50; display: none;">Link copiado! Agora é só colar no WhatsApp dela.</p>
+                    <p id="shareStatus" style="font-size: 0.8rem; margin-top: 10px; color: #4caf50; display: none;">Link copiado! Envie pelo WhatsApp.</p>
                 </div>
             </div>
         </section>
@@ -219,6 +219,27 @@
     </div>
 
     <script>
+        // --- 1. CARREGAMENTO IMEDIATO DOS DADOS (ANTES DE TUDO) ---
+        function loadFromUrl() {
+            const params = new URLSearchParams(window.location.search);
+            const dataStr = params.get('data');
+            if (dataStr) {
+                try {
+                    const data = JSON.parse(decodeURIComponent(escape(atob(dataStr))));
+                    if(data.c !== undefined) localStorage.setItem('cofre_total', data.c);
+                    if(data.p) localStorage.setItem('planos_lista', data.p);
+                    if(data.d) localStorage.setItem('dialogo_lista', data.d);
+                    if(data.m) localStorage.setItem('playlist_amor', data.m);
+                    if(data.a) localStorage.setItem('album_maria', data.a);
+                    
+                    // Limpa a URL sem recarregar a página
+                    const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
+                    window.history.replaceState({path:newUrl}, '', newUrl);
+                } catch(e) { console.error("Erro ao ler dados"); }
+            }
+        }
+        loadFromUrl(); // Executa antes de carregar o restante do script
+
         let currentSlide = 0;
         const totalSlides = 12;
         const slider = document.getElementById('mainSlider');
@@ -230,43 +251,25 @@
 
         function generateShareLink() {
             const data = {
-                c: localStorage.getItem('cofre_total'),
-                p: localStorage.getItem('planos_lista'),
-                d: localStorage.getItem('dialogo_lista'),
-                m: localStorage.getItem('playlist_amor'),
-                a: localStorage.getItem('album_maria')
+                c: localStorage.getItem('cofre_total') || "0",
+                p: localStorage.getItem('planos_lista') || "[]",
+                d: localStorage.getItem('dialogo_lista') || "[]",
+                m: localStorage.getItem('playlist_amor') || "[]",
+                a: localStorage.getItem('album_maria') || "[]"
             };
             const encodedData = btoa(unescape(encodeURIComponent(JSON.stringify(data))));
             const url = window.location.origin + window.location.pathname + "?data=" + encodedData;
             
-            const tempInput = document.createElement("input");
-            document.body.appendChild(tempInput);
-            tempInput.value = url;
-            tempInput.select();
-            document.execCommand("copy");
-            document.body.removeChild(tempInput);
-
-            const status = document.getElementById('shareStatus');
-            status.style.display = 'block';
-            setTimeout(() => status.style.display = 'none', 5000);
+            navigator.clipboard.writeText(url).then(() => {
+                const status = document.getElementById('shareStatus');
+                status.style.display = 'block';
+                setTimeout(() => status.style.display = 'none', 5000);
+            }).catch(err => {
+                alert("Copie este link manualmente: " + url);
+            });
         }
 
-        function loadFromUrl() {
-            const params = new URLSearchParams(window.location.search);
-            const dataStr = params.get('data');
-            if (dataStr) {
-                try {
-                    const data = JSON.parse(decodeURIComponent(escape(atob(dataStr))));
-                    if(data.c) localStorage.setItem('cofre_total', data.c);
-                    if(data.p) localStorage.setItem('planos_lista', data.p);
-                    if(data.d) localStorage.setItem('dialogo_lista', data.d);
-                    if(data.m) localStorage.setItem('playlist_amor', data.m);
-                    if(data.a) localStorage.setItem('album_maria', data.a);
-                    window.history.replaceState({}, document.title, window.location.pathname);
-                } catch(e) { console.error("Erro ao ler dados do link"); }
-            }
-        }
-
+        // --- CONTADOR ---
         const startDate = new Date('2025-06-15T00:00:00');
         function updateTimer() {
             const diff = new Date() - startDate;
@@ -278,25 +281,31 @@
         }
         setInterval(updateTimer, 1000); updateTimer();
 
+        // --- INTERAÇÕES ---
         function checkLove() {
             const val = document.getElementById('userInput').value.toLowerCase();
-            if(val.length > 2) { document.getElementById('loveResponse').style.display = 'block'; } 
-            else { document.getElementById('loveResponse').style.display = 'none'; }
+            if(val.length > 2) document.getElementById('loveResponse').style.display = 'block';
+            else document.getElementById('loveResponse').style.display = 'none';
         }
 
-        let money = parseFloat(localStorage.getItem('cofre_total') || 0);
         function updateCofreUI() {
+            const money = parseFloat(localStorage.getItem('cofre_total') || 0);
             document.getElementById('currentMoney').innerText = money.toFixed(2);
             document.getElementById('bar').style.width = Math.min((money/5000)*100, 100) + "%";
         }
         function addMoney() {
             let v = parseFloat(document.getElementById('moneyInput').value);
-            if(!isNaN(v)){ money += v; localStorage.setItem('cofre_total', money); updateCofreUI(); document.getElementById('moneyInput').value = ""; }
+            if(!isNaN(v)){
+                let money = parseFloat(localStorage.getItem('cofre_total') || 0);
+                money += v;
+                localStorage.setItem('cofre_total', money);
+                updateCofreUI();
+                document.getElementById('moneyInput').value = "";
+            }
         }
 
-        let wishes = JSON.parse(localStorage.getItem('planos_lista') || '[]');
         function saveAndRenderWishes() {
-            localStorage.setItem('planos_lista', JSON.stringify(wishes));
+            let wishes = JSON.parse(localStorage.getItem('planos_lista') || '[]');
             document.getElementById('wishList').innerHTML = wishes.map((w, i) => `
                 <div class="list-item ${w.done ? 'done' : ''}">
                     <span>• ${w.text}</span>
@@ -306,34 +315,59 @@
         }
         function addWish() {
             let text = document.getElementById('wishInput').value;
-            if(text) { wishes.push({ text: text, done: false }); saveAndRenderWishes(); document.getElementById('wishInput').value = ""; }
+            if(text) {
+                let wishes = JSON.parse(localStorage.getItem('planos_lista') || '[]');
+                wishes.push({ text: text, done: false });
+                localStorage.setItem('planos_lista', JSON.stringify(wishes));
+                saveAndRenderWishes();
+                document.getElementById('wishInput').value = "";
+            }
         }
-        function toggleWish(index) { wishes[index].done = !wishes[index].done; saveAndRenderWishes(); }
+        function toggleWish(index) {
+            let wishes = JSON.parse(localStorage.getItem('planos_lista') || '[]');
+            wishes[index].done = !wishes[index].done;
+            localStorage.setItem('planos_lista', JSON.stringify(wishes));
+            saveAndRenderWishes();
+        }
 
-        let issues = JSON.parse(localStorage.getItem('dialogo_lista') || '[]');
         function renderIssues() {
+            let issues = JSON.parse(localStorage.getItem('dialogo_lista') || '[]');
             document.getElementById('issueList').innerHTML = issues.map(i => `<div class="list-item"><span>• ${i}</span></div>`).join('');
         }
         function addIssue() {
             let text = document.getElementById('issueInput').value;
-            if(text) { issues.push(text); localStorage.setItem('dialogo_lista', JSON.stringify(issues)); renderIssues(); document.getElementById('issueInput').value = ""; }
+            if(text) {
+                let issues = JSON.parse(localStorage.getItem('dialogo_lista') || '[]');
+                issues.push(text);
+                localStorage.setItem('dialogo_lista', JSON.stringify(issues));
+                renderIssues();
+                document.getElementById('issueInput').value = "";
+            }
         }
 
-        let playlist = JSON.parse(localStorage.getItem('playlist_amor') || '[]');
         function renderPlaylist() {
+            let playlist = JSON.parse(localStorage.getItem('playlist_amor') || '[]');
             document.getElementById('playlistContainer').innerHTML = playlist.map(m => `
                 <div class="music-card">
                     <strong>${m.name}</strong><br>
-                    <a href="${m.link}" target="_blank" style="color:var(--pink); font-size:0.8rem;">Clique para ouvir no YouTube</a>
+                    <a href="${m.link}" target="_blank" style="color:var(--pink); font-size:0.8rem;">Clique para ouvir</a>
                 </div>
             `).join('');
         }
         function addMusic() {
             let name = document.getElementById('musicName').value;
             let link = document.getElementById('musicLink').value;
-            if(name && link) { playlist.push({ name: name, link: link }); localStorage.setItem('playlist_amor', JSON.stringify(playlist)); renderPlaylist(); document.getElementById('musicName').value = ""; document.getElementById('musicLink').value = ""; }
+            if(name && link) {
+                let playlist = JSON.parse(localStorage.getItem('playlist_amor') || '[]');
+                playlist.push({ name: name, link: link });
+                localStorage.setItem('playlist_amor', JSON.stringify(playlist));
+                renderPlaylist();
+                document.getElementById('musicName').value = "";
+                document.getElementById('musicLink').value = "";
+            }
         }
 
+        // --- ÁLBUM ---
         const imgInp = document.getElementById('imgUpload');
         const imgPre = document.getElementById('photoPreview');
         let selectedBase64 = "";
@@ -350,7 +384,7 @@
                 album.push({ img: selectedBase64, text: desc });
                 localStorage.setItem('album_maria', JSON.stringify(album));
                 renderAlbum();
-                document.getElementById('photoDesc').value = ""; imgPre.style.display = 'none';
+                document.getElementById('photoDesc').value = ""; imgPre.style.display = 'none'; selectedBase64 = "";
             }
         }
         function renderAlbum() {
@@ -359,7 +393,6 @@
         }
 
         window.onload = () => {
-            loadFromUrl();
             updateCofreUI();
             saveAndRenderWishes();
             renderIssues();
